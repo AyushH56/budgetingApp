@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_gradient_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Analytics"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Period Selection -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Period"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_marginBottom="16dp"/>
+
+        <RadioGroup
+            android:id="@+id/periodRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp"
+            android:gravity="center_horizontal">
+
+            <RadioButton
+                android:id="@+id/radioLastWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Week"
+                android:textSize="16sp"
+                android:layout_marginRight="16dp"/>
+
+            <RadioButton
+                android:id="@+id/radioLastMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Month"
+                android:textSize="16sp"
+                android:layout_marginRight="16dp"/>
+
+            <RadioButton
+                android:id="@+id/radioLastQuarter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Quarter"
+                android:textSize="16sp"/>
+        </RadioGroup>
+
+        <!-- Analytics Cards Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Amount Spent per Category"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Analytics Cards Row 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:weightSum="2">
+
+            <!-- Percentage Card -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/ic_analytics_drawing_background"
+                android:padding="16dp"
+                android:layout_marginRight="8dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Percentage"
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <!-- Category Card -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/ic_analytics_drawing_background"
+                android:padding="16dp"
+                android:layout_marginLeft="8dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Category"
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Analytics Cards Row 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:weightSum="2">
+
+            <!-- Min/Max Goals Card -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/ic_analytics_drawing_background"
+                android:padding="16dp"
+                android:layout_marginRight="8dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Min/Max Goals"
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <!-- Attendance Card -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/ic_analytics_drawing_background"
+                android:padding="16dp"
+                android:layout_marginLeft="8dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Attendance"
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Date Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/selectedDateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select a date to view analytics"
+            android:textSize="16sp"
+            android:textColor="#555555"
+            android:gravity="center"
+            android:padding="16dp"
+            android:background="@drawable/ic_date_background"/>
+
+    </LinearLayout>
+</ScrollView>

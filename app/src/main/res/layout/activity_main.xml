@@ -165,7 +165,7 @@
                     <!-- Sample Rows -->
                     <TableRow android:background="#FFFFFF">
                         <TextView
-                            android:text="Groceries"
+                            android:text="Booty"
                             android:padding="12dp"
                             android:textColor="#000000" />
                         <TextView

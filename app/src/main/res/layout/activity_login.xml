@@ -9,69 +9,75 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp"
+        android:padding="32dp"
         android:gravity="center_horizontal">
 
         <TextView
             android:text="Welcome to LeafSaver!"
-            android:textSize="24sp"
-            android:textStyle="italic|bold"
+            android:textSize="28sp"
+            android:textStyle="bold|italic"
             android:textColor="#000000"
             android:gravity="center"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="24dp" />
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:layout_gravity="center"
-            android:contentDescription="Tree Icon"
-            android:layout_marginBottom="24dp"
             android:src="@drawable/tree_icon"
-            android:background="@android:color/transparent" />
+            android:layout_marginBottom="24dp"
+            android:contentDescription="Tree Icon" />
 
         <TextView
             android:text="Please Log In to Proceed"
             android:textColor="#555555"
             android:textSize="16sp"
             android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
+
+        <EditText
+            android:id="@+id/loginEmail"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/edittext_background"
+            android:padding="16dp"
             android:layout_marginBottom="16dp" />
 
         <EditText
-            android:hint="Enter your username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:backgroundTint="#000000"
-            android:padding="12dp" />
-
-        <EditText
-            android:hint="Enter your password"
+            android:id="@+id/loginPassword"
+            android:hint="Password"
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="#000000"
-            android:padding="12dp" />
-
-        <TextView
-            android:text="Don't have an account? Register now"
-            android:textColor="#000000"
-            android:textSize="12sp"
-            android:layout_marginBottom="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:background="@drawable/edittext_background"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp" />
 
         <Button
-            android:text="Login"
+            android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#222222"
-            android:textColor="#FFFFFF"
-            android:padding="12dp" />
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/green_btn_background"
+            android:padding="14dp"
+            android:text="Login"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tvRegisterNow"
+            android:text="Don't have an account? Register now"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
     </LinearLayout>
+
 </ScrollView>

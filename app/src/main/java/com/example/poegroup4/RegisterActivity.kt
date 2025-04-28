@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 
 class RegisterActivity : AppCompatActivity() {
 
+    private lateinit var etFirstName: EditText
+    private lateinit var etSurname: EditText
     private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var etConfirmPassword: EditText
@@ -18,18 +20,22 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        // Finds ID's
+        // Find IDs
+        etFirstName = findViewById(R.id.registerFirstName)
+        etSurname = findViewById(R.id.registerSurname)
         etEmail = findViewById(R.id.registerEmail)
         etPassword = findViewById(R.id.registerPassword)
         etConfirmPassword = findViewById(R.id.registerConfirmPassword)
         btnSignUp = findViewById(R.id.btnSignUp)
 
         btnSignUp.setOnClickListener {
+            val firstName = etFirstName.text.toString().trim()
+            val surname = etSurname.text.toString().trim()
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
             val confirmPassword = etConfirmPassword.text.toString().trim()
 
-            if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            if (firstName.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields!", Toast.LENGTH_SHORT).show()
             } else if (password != confirmPassword) {
                 Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT).show()
@@ -37,6 +43,8 @@ class RegisterActivity : AppCompatActivity() {
                 // Save user data
                 val sharedPref = getSharedPreferences("UserData", MODE_PRIVATE)
                 val editor = sharedPref.edit()
+                editor.putString("firstName", firstName)
+                editor.putString("surname", surname)
                 editor.putString("email", email)
                 editor.putString("password", password)
                 editor.apply()

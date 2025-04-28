@@ -47,6 +47,11 @@
             android:textColor="#000000"
             android:layout_marginBottom="24dp"/>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categoryRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
         <!-- Category Items -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -115,12 +120,13 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/edtCatName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Shopping"
-                    android:textStyle="bold"
+                    android:textColor="#000000"
                     android:textSize="18sp"
-                    android:textColor="#000000"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -141,13 +147,14 @@
 
         <!-- Add Category Section -->
         <TextView
+            android:id="@+id/edtCatBudget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             android:text="Add Category"
-            android:textSize="20sp"
-            android:textStyle="bold"
             android:textColor="#000000"
-            android:layout_marginBottom="24dp"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <!-- Category Name Input -->
         <TextView

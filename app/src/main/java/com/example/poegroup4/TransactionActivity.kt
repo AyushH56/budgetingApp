@@ -6,6 +6,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 //import com.google.firebase.auth.FirebaseAuth
 //import com.google.firebase.database.FirebaseDatabase
 //import com.google.firebase.storage.FirebaseStorage
@@ -65,26 +68,26 @@ class TransactionActivity : Activity() {
             return
         }
 
-//        val amount = amountText.toDouble()
-//        val roundedAmount = kotlin.math.ceil(amount)
-//        val emergencyFund = roundedAmount - amount
-//        val startTime = textStartTime.text.toString()
-//        val endTime = textEndTime.text.toString()
-//
-//        if (selectedPhotoUri != null) {
-//            uploadPhotoAndSaveTransaction(amount, roundedAmount, emergencyFund, description, startTime, endTime, selectedPhotoUri!!)
-//        } else {
-//            val transaction = Transaction(
-//                amount,
-//                roundedAmount,
-//                emergencyFund,
-//                description,
-//                startTime,
-//                endTime,
-//                null
-//            )
-//            saveTransactionToDatabase(transaction)
-//        }
+        val amount = amountText.toDouble()
+        val roundedAmount = kotlin.math.ceil(amount)
+        val emergencyFund = roundedAmount - amount
+        val startTime = textStartTime.text.toString()
+        val endTime = textEndTime.text.toString()
+
+        if (selectedPhotoUri != null) {
+            uploadPhotoAndSaveTransaction(amount, roundedAmount, emergencyFund, description, startTime, endTime, selectedPhotoUri!!)
+        } else {
+            val transaction = Transaction(
+                amount,
+                roundedAmount,
+                emergencyFund,
+                description,
+                startTime,
+                endTime,
+                null
+            )
+            saveTransactionToDatabase(transaction)
+        }
     }
 
     private fun uploadPhotoAndSaveTransaction(
@@ -96,54 +99,54 @@ class TransactionActivity : Activity() {
         endTime: String,
         photoUri: Uri
     ) {
-//        val photoRef = FirebaseStorage.getInstance().reference
-//            .child("transaction_photos/${System.currentTimeMillis()}.jpg")
-//
-//        photoRef.putFile(photoUri)
-//            .addOnSuccessListener {
-//                photoRef.downloadUrl.addOnSuccessListener { uri ->
-//                    val transaction = Transaction(
-//                        amount,
-//                        roundedAmount,
-//                        emergencyFund,
-//                        description,
-//                        startTime,
-//                        endTime,
-//                        uri.toString()
-//                    )
-//                    saveTransactionToDatabase(transaction)
-//                }
-//            }
-//            .addOnFailureListener {
-//                Toast.makeText(this, "Photo upload failed", Toast.LENGTH_SHORT).show()
-//            }
-//    }
-//
-//    private fun saveTransactionToDatabase(transaction: Transaction) {
-//        val dbRef = FirebaseDatabase.getInstance().reference
-//        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "guest"
-//        val transactionId = dbRef.push().key ?: return
-//
-//        dbRef.child("users")
-//            .child(userId)
-//            .child("transactions")
-//            .child(transactionId)
-//            .setValue(transaction)
-//            .addOnSuccessListener {
-//                Toast.makeText(this, "Transaction saved!", Toast.LENGTH_SHORT).show()
-//                finish() // or reset form
-//            }
-//            .addOnFailureListener {
-//                Toast.makeText(this, "Failed to save transaction", Toast.LENGTH_SHORT).show()
-//            }
-//    }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
-//            selectedPhotoUri = data?.data
-//            Toast.makeText(this, "Photo selected!", Toast.LENGTH_SHORT).show()
-//        }
+        val photoRef = FirebaseStorage.getInstance().reference
+            .child("transaction_photos/${System.currentTimeMillis()}.jpg")
+
+        photoRef.putFile(photoUri)
+            .addOnSuccessListener {
+                photoRef.downloadUrl.addOnSuccessListener { uri ->
+                    val transaction = Transaction(
+                        amount,
+                        roundedAmount,
+                        emergencyFund,
+                        description,
+                        startTime,
+                        endTime,
+                        uri.toString()
+                    )
+                    saveTransactionToDatabase(transaction)
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Photo upload failed", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun saveTransactionToDatabase(transaction: Transaction) {
+        val dbRef = FirebaseDatabase.getInstance().reference
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "guest"
+        val transactionId = dbRef.push().key ?: return
+
+        dbRef.child("users")
+            .child(userId)
+            .child("transactions")
+            .child(transactionId)
+            .setValue(transaction)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Transaction saved!", Toast.LENGTH_SHORT).show()
+                finish() // or reset form
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to save transaction", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+            selectedPhotoUri = data?.data
+            Toast.makeText(this, "Photo selected!", Toast.LENGTH_SHORT).show()
+        }
     }
 }

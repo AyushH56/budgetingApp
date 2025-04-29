@@ -14,8 +14,10 @@ import com.google.firebase.storage.FirebaseStorage
 //import com.google.firebase.storage.FirebaseStorage
 import java.math.BigDecimal
 import java.math.RoundingMode
+import com.example.poegroup4.BaseActivity
 
-class TransactionActivity : Activity() {
+
+class TransactionActivity : BaseActivity() {
 
     private lateinit var editAmount: EditText
     private lateinit var editDescription: EditText
@@ -30,10 +32,14 @@ class TransactionActivity : Activity() {
         const val PICK_IMAGE_REQUEST = 101
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_transactions)
+//       setContentView(R.layout.activity_transactions)
+        layoutInflater.inflate(R.layout.activity_transactions, findViewById(R.id.content_frame))
 
+        // Set Toolbar Title
+        supportActionBar?.title = "Transactions"
         // Bind views
         editAmount = findViewById(R.id.edit_amount)
         editDescription = findViewById(R.id.edit_description)

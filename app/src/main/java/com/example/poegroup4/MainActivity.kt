@@ -7,15 +7,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : BaseActivity() { // Extends BaseActivity
     private lateinit var btnOpenDatePicker: Button
     private lateinit var tvSelectedMonth: TextView
     private lateinit var recyclerViewBudget: RecyclerView
@@ -28,7 +26,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        // Inflate content into BaseActivity's content_frame
+        layoutInflater.inflate(R.layout.activity_main, findViewById(R.id.content_frame))
+
+        // Set Toolbar Title
+        supportActionBar?.title = "Home Page"
 
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences("BudgetData", MODE_PRIVATE)
@@ -104,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadSavedBudget() {
         // Retrieve data from SharedPreferences
-        val budgetGoal = sharedPreferences.getString("BudgetGoal","")
+        val budgetGoal = sharedPreferences.getString("BudgetGoal", "")
         val emergencyFund = sharedPreferences.getString("EmergencyFund", "")
 
         // Update the input fields with the saved data (optional, for testing)

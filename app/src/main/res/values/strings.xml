@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">POE Group 4</string>
+    <string name="home_page">Home Page</string>// have
+    <string name="categories">Categories</string> // have
+    <string name="transactions">Transactions</string>// have
+    <string name="budget_goals">Budget Goals</string>
+    <string name="category_spending">Category Spending</string>
+    <string name="search_expenses">Search Expenses</string>
+    <string name="my_tree">My Tree</string>
+    <string name="analytics">Analytics</string>
+    <string name="progress_dashboard">Progress Dashboard</string>
+    <string name="logout">Logout</string>
+    <string name="navigation_open">Open navigation</string>
+    <string name="navigation_close">Close navigation</string>
 </resources>

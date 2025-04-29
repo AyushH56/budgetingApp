@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "619209747989",
+    "project_id": "budgetauthdatabase",
+    "storage_bucket": "budgetauthdatabase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619209747989:android:59525656a6853d0cfa281c",
+        "android_client_info": {
+          "package_name": "com.example.poegroup4"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASb1tUkGotW64k6hNBNrjc9sdPVuk-wMo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

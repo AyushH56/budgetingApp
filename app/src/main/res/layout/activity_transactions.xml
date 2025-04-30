@@ -47,126 +47,12 @@
             android:textColor="#000000"
             android:layout_marginBottom="16dp" />
 
-        <RadioGroup
-            android:id="@+id/radio_group_categories"
+        <Spinner
+            android:id="@+id/categorySpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="24dp">
-
-            <RadioButton
-                android:id="@+id/radio_groceries"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Groceries (Budget: R2000)"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_transportation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Transportation (Budget: R1000)"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_shopping"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Shopping (Budget: R1500)"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_entertainment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Entertainment"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_health"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Health and Wellness"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_utilities"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Utilities (Water, Electricity)"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_education"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Education"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_housing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Housing (Rent, Mortgage)"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_insurance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Insurance"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_savings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Savings and Investments"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_dining"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dining Out"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_personal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Personal Care"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/radio_travel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Travel"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <!-- New Miscellaneous Category -->
-            <RadioButton
-                android:id="@+id/radio_other"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Other (Miscellaneous)"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-        </RadioGroup>
+            android:layout_marginBottom="24dp"
+            android:spinnerMode="dropdown" />
 
         <!-- Amount -->
         <TextView
@@ -266,6 +152,30 @@
                 android:padding="12dp"
                 android:layout_marginLeft="16dp" />
         </LinearLayout>
+
+        <!-- Select Date Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Date"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Date Selection (Clickable Element) -->
+        <TextView
+            android:id="@+id/text_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="Click to select date"
+            android:textColor="@color/nav"
+            android:textSize="18sp" />
 
         <!-- Upload Photo -->
         <TextView

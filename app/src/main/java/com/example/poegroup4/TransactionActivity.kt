@@ -1,7 +1,7 @@
 package com.example.poegroup4
 
-
 import android.app.Activity
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,13 +9,7 @@ import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-//import com.google.firebase.auth.FirebaseAuth
-//import com.google.firebase.database.FirebaseDatabase
-//import com.google.firebase.storage.FirebaseStorage
-import java.math.BigDecimal
-import java.math.RoundingMode
-import com.example.poegroup4.BaseActivity
-
+import java.util.*
 
 class TransactionActivity : BaseActivity() {
 
@@ -25,6 +19,7 @@ class TransactionActivity : BaseActivity() {
     private lateinit var textEndTime: TextView
     private lateinit var btnUploadPhoto: Button
     private lateinit var btnSaveExpense: Button
+    private lateinit var radioGroupCategories: RadioGroup
 
     private var selectedPhotoUri: Uri? = null
 
@@ -32,14 +27,12 @@ class TransactionActivity : BaseActivity() {
         const val PICK_IMAGE_REQUEST = 101
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//       setContentView(R.layout.activity_transactions)
         layoutInflater.inflate(R.layout.activity_transactions, findViewById(R.id.content_frame))
 
-        // Set Toolbar Title
         supportActionBar?.title = "Transactions"
+
         // Bind views
         editAmount = findViewById(R.id.edit_amount)
         editDescription = findViewById(R.id.edit_description)
@@ -47,32 +40,66 @@ class TransactionActivity : BaseActivity() {
         textEndTime = findViewById(R.id.text_end_time)
         btnUploadPhoto = findViewById(R.id.btn_upload_photo)
         btnSaveExpense = findViewById(R.id.btn_save_expense)
+        radioGroupCategories = findViewById(R.id.radio_group_categories)
 
-        // Upload
         btnUploadPhoto.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
         }
 
-        // Save expense
         btnSaveExpense.setOnClickListener {
             saveExpense()
         }
 
-        // Dummy time values for now
+        // Set listeners for the time pickers
+        textStartTime.setOnClickListener {
+            showTimePickerDialog { hour, minute ->
+                textStartTime.text = String.format("%02d:%02d AM", hour, minute)
+            }
+        }
+
+        textEndTime.setOnClickListener {
+            showTimePickerDialog { hour, minute ->
+                textEndTime.text = String.format("%02d:%02d AM", hour, minute)
+            }
+        }
+
+        // Dummy time
         textStartTime.text = "9:00 AM"
         textEndTime.text = "10:00 AM"
+    }
+
+    private fun showTimePickerDialog(onTimeSet: (hourOfDay: Int, minute: Int) -> Unit) {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(
+            this,
+            { _, selectedHour, selectedMinute ->
+                onTimeSet(selectedHour, selectedMinute)
+            },
+            hour,
+            minute,
+            false // false for 12-hour format
+        )
+
+        timePickerDialog.show()
     }
 
     private fun saveExpense() {
         val amountText = editAmount.text.toString()
         val description = editDescription.text.toString()
+        val selectedCategoryId = radioGroupCategories.checkedRadioButtonId
 
-        if (amountText.isBlank()) {
-            Toast.makeText(this, "Please enter an amount", Toast.LENGTH_SHORT).show()
+        if (amountText.isBlank() || selectedCategoryId == -1) {
+            Toast.makeText(this, "Please enter an amount and select a category", Toast.LENGTH_SHORT).show()
             return
         }
+
+        val selectedCategory = findViewById<RadioButton>(selectedCategoryId).text.toString()
+        val fullDescription = "$selectedCategory - $description"
 
         val amount = amountText.toDouble()
         val roundedAmount = kotlin.math.ceil(amount)
@@ -81,17 +108,9 @@ class TransactionActivity : BaseActivity() {
         val endTime = textEndTime.text.toString()
 
         if (selectedPhotoUri != null) {
-            uploadPhotoAndSaveTransaction(amount, roundedAmount, emergencyFund, description, startTime, endTime, selectedPhotoUri!!)
+            uploadPhotoAndSaveTransaction(amount, roundedAmount, emergencyFund, fullDescription, startTime, endTime, selectedPhotoUri!!)
         } else {
-            val transaction = Transaction(
-                amount,
-                roundedAmount,
-                emergencyFund,
-                description,
-                startTime,
-                endTime,
-                null
-            )
+            val transaction = Transaction(amount, roundedAmount, emergencyFund, fullDescription, startTime, endTime, null)
             saveTransactionToDatabase(transaction)
         }
     }
@@ -111,15 +130,7 @@ class TransactionActivity : BaseActivity() {
         photoRef.putFile(photoUri)
             .addOnSuccessListener {
                 photoRef.downloadUrl.addOnSuccessListener { uri ->
-                    val transaction = Transaction(
-                        amount,
-                        roundedAmount,
-                        emergencyFund,
-                        description,
-                        startTime,
-                        endTime,
-                        uri.toString()
-                    )
+                    val transaction = Transaction(amount, roundedAmount, emergencyFund, description, startTime, endTime, uri.toString())
                     saveTransactionToDatabase(transaction)
                 }
             }
@@ -140,7 +151,7 @@ class TransactionActivity : BaseActivity() {
             .setValue(transaction)
             .addOnSuccessListener {
                 Toast.makeText(this, "Transaction saved!", Toast.LENGTH_SHORT).show()
-                finish() // or reset form
+                finish()
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed to save transaction", Toast.LENGTH_SHORT).show()

@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Header: Transactions title + right-aligned tree icon -->
+        <!-- Header -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 android:background="@android:color/transparent" />
         </FrameLayout>
 
-        <!-- Select Category Section -->
+        <!-- Select Category -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,87 +45,130 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
-        <!-- Groceries Category -->
-        <LinearLayout
+        <RadioGroup
+            android:id="@+id/radio_group_categories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24dp">
 
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
+            <RadioButton
+                android:id="@+id/radio_groceries"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Groceries"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="#000000"/>
+                android:text="Groceries (Budget: R2000)"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
-            <TextView
-                android:layout_width="match_parent"
+            <RadioButton
+                android:id="@+id/radio_transportation"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Budget: R2000"
-                android:textSize="16sp"
-                android:textColor="#555555"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
+                android:text="Transportation (Budget: R1000)"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
-        <!-- Transportation Category -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="16dp"
-
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
+            <RadioButton
+                android:id="@+id/radio_shopping"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Transportation"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="#000000"/>
+                android:text="Shopping (Budget: R1500)"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
-            <TextView
-                android:layout_width="match_parent"
+            <RadioButton
+                android:id="@+id/radio_entertainment"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Budget: R1000"
-                android:textSize="16sp"
-                android:textColor="#555555"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
+                android:text="Entertainment"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
-        <!-- Shopping Category -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="24dp"
-
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
+            <RadioButton
+                android:id="@+id/radio_health"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Shopping"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="#000000"/>
+                android:text="Health and Wellness"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
-            <TextView
-                android:layout_width="match_parent"
+            <RadioButton
+                android:id="@+id/radio_utilities"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Budget: R1500"
-                android:textSize="16sp"
-                android:textColor="#555555"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
+                android:text="Utilities (Water, Electricity)"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
-        <!-- Amount Section -->
+            <RadioButton
+                android:id="@+id/radio_education"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Education"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radio_housing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Housing (Rent, Mortgage)"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radio_insurance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Insurance"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radio_savings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Savings and Investments"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radio_dining"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dining Out"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radio_personal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Personal Care"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radio_travel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Travel"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <!-- New Miscellaneous Category -->
+            <RadioButton
+                android:id="@+id/radio_other"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Other (Miscellaneous)"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </RadioGroup>
+
+        <!-- Amount -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -133,7 +176,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp" />
 
         <EditText
             android:id="@+id/edit_amount"
@@ -145,7 +188,7 @@
             android:backgroundTint="#000000"
             android:textColor="#000000"
             android:layout_marginBottom="8dp"
-            android:padding="16dp"/>
+            android:padding="16dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -153,9 +196,9 @@
             android:text="Amount entered will be rounded up and the difference will be added to the Emergency Fund."
             android:textSize="14sp"
             android:textColor="#555555"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="24dp" />
 
-        <!-- Description Section -->
+        <!-- Description -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -163,7 +206,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp" />
 
         <EditText
             android:id="@+id/edit_description"
@@ -174,16 +217,16 @@
             android:backgroundTint="#000000"
             android:textColor="#000000"
             android:layout_marginBottom="24dp"
-            android:padding="16dp"/>
+            android:padding="16dp" />
 
         <!-- Divider -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#E0E0E0"
-            android:layout_marginVertical="8dp"/>
+            android:layout_marginVertical="8dp" />
 
-        <!-- Time Section -->
+        <!-- Time -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -192,7 +235,7 @@
             android:textStyle="bold"
             android:textColor="#000000"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -209,8 +252,7 @@
                 android:textSize="16sp"
                 android:textColor="#000000"
                 android:gravity="center"
-                android:padding="12dp"
-                />
+                android:padding="12dp" />
 
             <TextView
                 android:id="@+id/text_end_time"
@@ -222,11 +264,10 @@
                 android:textColor="#000000"
                 android:gravity="center"
                 android:padding="12dp"
-                android:layout_marginLeft="16dp"
-                />
+                android:layout_marginLeft="16dp" />
         </LinearLayout>
 
-        <!-- Upload Photo Section -->
+        <!-- Upload Photo -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -234,7 +275,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <Button
             android:id="@+id/btn_upload_photo"
@@ -245,9 +286,9 @@
             android:paddingVertical="12dp"
             android:backgroundTint="#000000"
             android:textColor="#FFFFFF"
-            android:layout_marginBottom="32dp"/>
+            android:layout_marginBottom="32dp" />
 
-        <!-- Save Expense Button -->
+        <!-- Save Button -->
         <Button
             android:id="@+id/btn_save_expense"
             android:layout_width="match_parent"
@@ -257,7 +298,6 @@
             android:textStyle="bold"
             android:paddingVertical="16dp"
             android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"/>
-
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </ScrollView>

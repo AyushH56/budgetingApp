@@ -42,6 +42,8 @@
 
         <activity android:name=".BudgetGoalsActivity" />
 
+        <activity android:name=".SearchCategoryActivity" />
+
 
     </application>
 

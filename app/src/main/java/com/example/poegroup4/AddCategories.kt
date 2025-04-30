@@ -34,7 +34,7 @@ class AddCategories : BaseActivity() {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_add_categories)
 
-        // Inflating the layout properly
+
         layoutInflater.inflate(R.layout.activity_add_categories, findViewById(R.id.content_frame))
 
         // Set toolbar title

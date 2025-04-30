@@ -25,8 +25,8 @@ class CategoriesAdapter (
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val category = categories[position]
-        //holder.categoryNameTextView.text = category.name
-        //holder.categoryBudgetTextView.text = "Budget: R${category.budget}"
+        holder.categoryNameTextView.text = category.catName
+        holder.categoryBudgetTextView.text = "Budget: R${category.catBudget}"
     }
 
     override fun getItemCount(): Int = categories.size

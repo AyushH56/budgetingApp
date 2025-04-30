@@ -9,8 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.poegroup4.adapters.CategoriesAdapter
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 //import com.google.firebase.database.
 
@@ -57,6 +60,9 @@ class AddCategories : BaseActivity() {
         // Firebase Database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("categories").child(userId)
 
+        loadCategories()
+
+
         // Initialize list and adapter
         categoryList = ArrayList()
         categoryAdapter = CategoriesAdapter(categoryList)
@@ -93,24 +99,26 @@ class AddCategories : BaseActivity() {
             Toast.makeText(this, "Please fill all fields!", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun loadCategories() {
+        val userId = auth.currentUser?.uid ?: return
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                categoryList.clear()
+                for (categorySnap in snapshot.children) {
+                    val category = categorySnap.getValue(Categories::class.java)
+                    category?.let { categoryList.add(it) }
+                }
+                categoryAdapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@AddCategories, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 }
 
 
-//    private fun loadCategories() {
-//        val userId = auth.currentUser?.uid ?: return
-//        databaseReference.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                categoryList.clear()
-//                for (categorySnap in snapshot.children) {
-//                    val category = categorySnap.getValue(Categories::class.java)
-//                    category?.let { categoryList.add(it) }
-//                }
-//                categoryAdapter.notifyDataSetChanged()
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                Toast.makeText(this@AddCategories, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
-//}
+
+

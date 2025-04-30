@@ -54,8 +54,9 @@ open class BaseActivity : AppCompatActivity() {
                 0 -> startActivity(Intent(this, MainActivity::class.java))
                 1 -> startActivity(Intent(this, AddCategories::class.java))
                 2 -> startActivity(Intent(this, TransactionActivity::class.java))
+                3 -> startActivity(Intent(this, BudgetGoalsActivity::class.java))
+
                 // Placeholder pages for items not created
-                3 -> Toast.makeText(this, "Budget Goals not yet created.", Toast.LENGTH_SHORT).show()
                 4 -> Toast.makeText(this, "Category Spending not yet created.", Toast.LENGTH_SHORT).show()
                 5 -> Toast.makeText(this, "Search Expenses not yet created.", Toast.LENGTH_SHORT).show()
                 6 -> Toast.makeText(this, "My Tree not yet created.", Toast.LENGTH_SHORT).show()

@@ -40,6 +40,9 @@
         <activity android:name=".BaseActivity"/>
         <activity android:name=".TransactionActivity"/>
 
+        <activity android:name=".BudgetGoalsActivity" />
+
+
     </application>
 
 </manifest>

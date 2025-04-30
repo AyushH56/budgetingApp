@@ -34,7 +34,8 @@
         <!-- MainActivity -->
         <activity android:name=".MainActivity" />
 
-        <activity android:name=".AddCategories" />
+        <activity
+            android:name=".AddCategories" />
 
         <activity android:name=".BaseActivity"/>
         <activity android:name=".TransactionActivity"/>

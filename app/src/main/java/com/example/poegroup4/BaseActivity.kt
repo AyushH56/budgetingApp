@@ -58,12 +58,12 @@ open class BaseActivity : AppCompatActivity() {
                 4 -> startActivity(Intent(this, SearchCategoryActivity::class.java))
                 5 -> startActivity(Intent(this, SearchExpensesActivity::class.java))
 
-                // Placeholder pages for items not created
+                // POE Part 3 features (Coming Soon)
+                6 -> Toast.makeText(this, "My Tree (Coming Soon).", Toast.LENGTH_SHORT).show()
+                7 -> Toast.makeText(this, "Analytics (Coming Soon).", Toast.LENGTH_SHORT).show()
+                8 -> Toast.makeText(this, "Progress Dashboard (Coming Soon).", Toast.LENGTH_SHORT).show()
 
-
-                6 -> Toast.makeText(this, "My Tree not yet created.", Toast.LENGTH_SHORT).show()
-                7 -> Toast.makeText(this, "Analytics not yet created.", Toast.LENGTH_SHORT).show()
-                8 -> Toast.makeText(this, "Progress Dashboard not yet created.", Toast.LENGTH_SHORT).show()
+                // Done and Implemented Logout feature
                 9 -> logoutUser()
             }
             drawerLayout.closeDrawers()

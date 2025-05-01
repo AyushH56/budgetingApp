@@ -197,24 +197,104 @@ class TransactionActivity : BaseActivity() {
         val roundedAmount = kotlin.math.ceil(amount)
         val emergencyFund = roundedAmount - amount
 
-        if (selectedPhotoUri != null) {
-            encodePhotoAndSaveTransaction(amount, roundedAmount, emergencyFund, selectedCategory, description, startTime, endTime, date, selectedPhotoUri!!)
-        } else {
-            val transaction = Transaction(
-                amount = amount,
-                roundedAmount = roundedAmount,
-                emergencyFund = emergencyFund,
-                category = selectedCategory,
-                description = description,
-                startTime = startTime,
-                endTime = endTime,
-                date = date,
-                photoBase64 = null,
-                timestamp = System.currentTimeMillis()
-            )
-            saveTransactionToDatabase(transaction)
-        }
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val calendar = Calendar.getInstance()
+        val currentMonth = calendar.get(Calendar.MONTH) + 1
+        val currentYear = calendar.get(Calendar.YEAR)
+
+        val transactionRef = FirebaseDatabase.getInstance()
+            .getReference("users")
+            .child(userId)
+            .child("transactions")
+
+        transactionRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var totalForMonth = 0.0
+
+                for (transactionSnap in snapshot.children) {
+                    val transCategory = transactionSnap.child("category").getValue(String::class.java)
+                    val transDate = transactionSnap.child("date").getValue(String::class.java)
+                    val transAmount = transactionSnap.child("amount").getValue(Double::class.java) ?: 0.0
+
+                    if (transCategory == selectedCategory && transDate != null) {
+                        val parts = transDate.split("/")
+                        if (parts.size == 3) {
+                            val month = parts[1].toIntOrNull()
+                            val year = parts[2].toIntOrNull()
+                            if (month == currentMonth && year == currentYear) {
+                                totalForMonth += transAmount
+                            }
+                        }
+                    }
+                }
+
+                val budgetRef = FirebaseDatabase.getInstance()
+                    .getReference("budgetGoals")
+                    .child(userId)
+
+                budgetRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(goalSnapshot: DataSnapshot) {
+                        var budgetLimit = Double.MAX_VALUE
+                        for (goal in goalSnapshot.children) {
+                            val category = goal.child("category").getValue(String::class.java)
+                            val maxBudget = goal.child("maxBudget").getValue(Double::class.java)
+                            if (category == selectedCategory && maxBudget != null) {
+                                budgetLimit = maxBudget
+                                break
+                            }
+                        }
+
+                        if ((totalForMonth + amount) > budgetLimit) {
+                            Toast.makeText(
+                                this@TransactionActivity,
+                                "⚠️ Warning: This will exceed your budget for $selectedCategory!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                        // Proceed to save the transaction
+                        val transaction = Transaction(
+                            amount = amount,
+                            roundedAmount = roundedAmount,
+                            emergencyFund = emergencyFund,
+                            category = selectedCategory,
+                            description = description,
+                            startTime = startTime,
+                            endTime = endTime,
+                            date = date,
+                            photoBase64 = null,
+                            timestamp = System.currentTimeMillis()
+                        )
+
+                        if (selectedPhotoUri != null) {
+                            encodePhotoAndSaveTransaction(
+                                amount,
+                                roundedAmount,
+                                emergencyFund,
+                                selectedCategory,
+                                description,
+                                startTime,
+                                endTime,
+                                date,
+                                selectedPhotoUri!!
+                            )
+                        } else {
+                            saveTransactionToDatabase(transaction)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(this@TransactionActivity, "Failed to load budget goal", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@TransactionActivity, "Failed to check transactions", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
+
 
 
     private fun encodePhotoAndSaveTransaction(

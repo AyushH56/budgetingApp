@@ -51,13 +51,14 @@
             android:id="@+id/edit_min_goal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/edittext_background"
+            android:backgroundTint="#FFFFFF"
             android:hint="Enter amount"
             android:inputType="numberDecimal"
-            android:textSize="16sp"
-            android:backgroundTint="#000000"
+            android:padding="16dp"
             android:textColor="#000000"
-            android:layout_marginBottom="8dp"
-            android:padding="16dp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -81,13 +82,15 @@
             android:id="@+id/edit_max_goal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/edittext_background"
+            android:backgroundTint="#FFFFFF"
             android:hint="Enter amount"
             android:inputType="numberDecimal"
-            android:textSize="16sp"
-            android:backgroundTint="#000000"
+            android:padding="16dp"
             android:textColor="#000000"
-            android:layout_marginBottom="8dp"
-            android:padding="16dp"/>
+            android:textSize="16sp"
+            android:tooltipText="This is the maximum amount you aim to spend mounthly" />
 
         <TextView
             android:layout_width="match_parent"
@@ -119,10 +122,11 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:gravity="center_vertical"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:background="@android:drawable/btn_dropdown"
-            android:gravity="center_vertical"/>
+            android:textColor="@color/black" />
 
 
         <!-- Save Button -->

@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:text="Budget Goals"
                 android:textSize="24sp"
-                android:textStyle="bold|italic"
+                android:textStyle="bold"
                 android:textColor="#000000"
                 android:gravity="center" />
 
@@ -122,25 +122,25 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
-            android:background="@android:drawable/btn_dropdown"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
+            android:popupBackground="@color/green_btn_background"
+            android:radius="12dp"
             android:textColor="@color/black" />
 
 
         <!-- Save Button -->
         <Button
             android:id="@+id/btn_save_goals"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save"
-            android:layout_gravity="end"
-            android:minWidth="120dp"
-            android:textSize="16sp"
-            android:paddingVertical="12dp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"/>
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/green_btn_background"
+            android:padding="14dp"
+            android:text="Save Budget Goals"
+            android:textColor="#FFFFFF" />
 
 
     </LinearLayout>

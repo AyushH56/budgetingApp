@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:text="Category Spending"
                 android:textSize="24sp"
-                android:textStyle="bold|italic"
+                android:textStyle="bold"
                 android:textColor="#000000"
                 android:gravity="center" />
 
@@ -58,18 +58,21 @@
                 android:id="@+id/radioLastWeek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="Last Week" />
 
             <RadioButton
                 android:id="@+id/radioLastMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="Last Month" />
 
             <RadioButton
                 android:id="@+id/radioLastQuarter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="Last Quarter" />
         </RadioGroup>
 
@@ -78,6 +81,7 @@
             android:id="@+id/totalSpentTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="Total Spent: R0"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -89,8 +93,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/categoryBreakdownRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_height="205dp"
+            android:clipToPadding="false"
+            android:overScrollMode="ifContentScrolls"
+            android:paddingBottom="16dp"
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 </ScrollView>

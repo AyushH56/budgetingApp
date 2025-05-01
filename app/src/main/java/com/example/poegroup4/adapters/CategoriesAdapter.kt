@@ -19,9 +19,10 @@ class CategoriesAdapter (
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.activity_view_categories, parent, false)
+            .inflate(R.layout.item_category, parent, false)
         return CategoryViewHolder(view)
     }
+
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val category = categories[position]

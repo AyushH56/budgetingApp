@@ -70,6 +70,7 @@
             android:layout_height="wrap_content"
             android:hint="Search"
             android:padding="16dp"
+            android:background="@drawable/edittext_background"
             android:textSize="16sp"
             android:drawablePadding="8dp"
             android:layout_marginBottom="24dp"/>
@@ -87,15 +88,21 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/expenseRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"/>
+            android:layout_height="205dp"
+            android:clipToPadding="false"
+            android:overScrollMode="ifContentScrolls"
+            android:paddingBottom="16dp"
+            android:scrollbars="vertical" />
 
         <!-- RecyclerView for displaying the Categories -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/categoryTotalsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"/>
+            android:layout_height="205dp"
+            android:clipToPadding="false"
+            android:overScrollMode="ifContentScrolls"
+            android:paddingBottom="16dp"
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 </ScrollView>

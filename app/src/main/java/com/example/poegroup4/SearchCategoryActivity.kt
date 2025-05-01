@@ -12,20 +12,22 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
-class SearchCategoryActivity : BaseActivity()
-{
+class SearchCategoryActivity : BaseActivity() {
     private lateinit var periodRadioGroup: RadioGroup
     private lateinit var totalSpentTextView: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var database: DatabaseReference
     private val auth = FirebaseAuth.getInstance()
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inflating the layout properly
         layoutInflater.inflate(R.layout.activity_category_spending, findViewById(R.id.content_frame))
 
         supportActionBar?.title = "Search Category Spending"
@@ -49,17 +51,17 @@ class SearchCategoryActivity : BaseActivity()
             }
 
             selectedPeriod?.let {
-                val cutoff = Calendar.getInstance()
-                cutoff.add(it.first, it.second)
-                fetchTransactionsSince(cutoff.timeInMillis)
+                val cutoffDate = Calendar.getInstance().apply {
+                    add(it.first, it.second)
+                }
+                fetchTransactions(cutoffDate.time)
             } ?: run {
                 totalSpentTextView.text = "Please select a time period"
             }
         }
-
     }
 
-    private fun fetchTransactionsSince(cutoffTime: Long) {
+    private fun fetchTransactions(cutoffDate: Date) {
         val userId = auth.currentUser?.uid ?: return
         val transactionsRef = database.child("users").child(userId).child("transactions")
 
@@ -70,18 +72,23 @@ class SearchCategoryActivity : BaseActivity()
 
                 for (transactionSnap in snapshot.children) {
                     val transaction = transactionSnap.getValue(Transaction::class.java)
-                    if (transaction != null && transaction.timestamp >= cutoffTime) {
-                        totalSpent += transaction.amount
-
-                        val descriptionParts = transaction.description.split(" - ")
-                        val category = descriptionParts.getOrNull(0)?.trim() ?: "Other"
-                        categoryMap[category] = categoryMap.getOrDefault(category, 0.0) + transaction.amount
+                    if (transaction != null) {
+                        try {
+                            val transactionDate = dateFormat.parse(transaction.date)
+                            if (transactionDate != null && transactionDate >= cutoffDate) {
+                                val category = transaction.category.ifBlank { "Other" }
+                                totalSpent += transaction.amount
+                                categoryMap[category] = categoryMap.getOrDefault(category, 0.0) + transaction.amount
+                            }
+                        } catch (e: Exception) {
+                            // Skip transactions with invalid date format
+                        }
                     }
                 }
 
                 if (categoryMap.isEmpty()) {
                     totalSpentTextView.text = "No transactions found for this period"
-                    recyclerView.adapter = null // Clear previous results
+                    recyclerView.adapter = null
                 } else {
                     totalSpentTextView.text = "Total Spent: R$totalSpent"
                     recyclerView.adapter = SearchCategoryAdapter(categoryMap)
@@ -94,6 +101,4 @@ class SearchCategoryActivity : BaseActivity()
             }
         })
     }
-
-
 }

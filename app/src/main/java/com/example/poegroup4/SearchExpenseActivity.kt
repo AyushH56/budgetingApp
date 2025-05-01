@@ -9,7 +9,6 @@ import android.util.Base64
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.poegroup4.adapters.ExpenseAdapter
@@ -20,7 +19,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class SearchExpensesActivity : BaseActivity() {
@@ -33,11 +34,11 @@ class SearchExpensesActivity : BaseActivity() {
     private val auth = FirebaseAuth.getInstance()
 
     private val allTx = mutableListOf<Transaction>()
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private lateinit var cutoffDate: Date
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       // setContentView(R.layout.activity_search_expenses)
-
         layoutInflater.inflate(R.layout.activity_search_expenses, findViewById(R.id.content_frame))
 
         supportActionBar?.title = "Search Expenses"
@@ -59,11 +60,9 @@ class SearchExpensesActivity : BaseActivity() {
 
         searchEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                reloadAndDisplay()
+                displayFiltered()
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
     }
@@ -71,53 +70,34 @@ class SearchExpensesActivity : BaseActivity() {
     private fun reloadAndDisplay() {
         val checked = periodGroup.checkedRadioButtonId
 
-        // Validation: check if a time period was selected
         if (checked == -1) {
             AlertDialog.Builder(this)
                 .setTitle("Validation Error")
                 .setMessage("Please select a time period before searching.")
                 .setPositiveButton("OK", null)
                 .show()
+            allTx.clear()
+            displayFiltered()
             return
         }
 
-        val now = System.currentTimeMillis()
-        val cutoff = Calendar.getInstance().apply {
-            when (checked) {
-                R.id.radioLastWeek -> add(Calendar.DAY_OF_YEAR, -7)
-                R.id.radioLastMonth -> add(Calendar.MONTH, -1)
-                R.id.radioLastQuarter -> add(Calendar.MONTH, -3)
-            }
-        }.timeInMillis
+        // Calculate cutoff date based on selected period
+        val calendar = Calendar.getInstance()
+        when (checked) {
+            R.id.radioLastWeek -> calendar.add(Calendar.DAY_OF_YEAR, -7)
+            R.id.radioLastMonth -> calendar.add(Calendar.MONTH, -1)
+            R.id.radioLastQuarter -> calendar.add(Calendar.MONTH, -3)
+        }
+        cutoffDate = calendar.time
 
         db.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snap: DataSnapshot) {
                 allTx.clear()
-
-                if (!snap.exists()) {
-                    AlertDialog.Builder(this@SearchExpensesActivity)
-                        .setTitle("No Data")
-                        .setMessage("No transactions found for the selected period.")
-                        .setPositiveButton("OK", null)
-                        .show()
-                    displayFiltered()
-                    return
-                }
-
                 for (c in snap.children) {
                     c.getValue(Transaction::class.java)?.let {
-                        if (it.timestamp >= cutoff) allTx.add(it)
+                        allTx.add(it)
                     }
                 }
-
-                if (allTx.isEmpty()) {
-                    AlertDialog.Builder(this@SearchExpensesActivity)
-                        .setTitle("No Results")
-                        .setMessage("No transactions match your criteria.")
-                        .setPositiveButton("OK", null)
-                        .show()
-                }
-
                 displayFiltered()
             }
 
@@ -131,16 +111,33 @@ class SearchExpensesActivity : BaseActivity() {
         })
     }
 
-
     private fun displayFiltered() {
-        val q = searchEdit.text.toString().lowercase(Locale.getDefault())
-        val filtered = allTx.filter {
-            it.description.lowercase().contains(q)
+        val query = searchEdit.text.toString().lowercase(Locale.getDefault())
+
+        val filtered = if (periodGroup.checkedRadioButtonId == -1) {
+            emptyList()
+        } else {
+            allTx.filter { transaction ->
+                try {
+                    val transactionDate = dateFormat.parse(transaction.date) ?: Date(0)
+                    val matchesPeriod = transactionDate >= cutoffDate
+                    val matchesSearch = query.isEmpty() || transaction.description.lowercase().contains(query)
+                    matchesPeriod && matchesSearch
+                } catch (e: Exception) {
+                    false // Skip if date parsing fails
+                }
+            }
         }
 
-        // 1) show expenses
+        if (filtered.isEmpty() && periodGroup.checkedRadioButtonId != -1) {
+            AlertDialog.Builder(this)
+                .setTitle("No Results")
+                .setMessage("No transactions match your search.")
+                .setPositiveButton("OK", null)
+                .show()
+        }
+
         expensesRV.adapter = ExpenseAdapter(filtered) { tx ->
-            // on photo click: decode and show
             tx.photoBase64?.let { b64 ->
                 val bytes = Base64.decode(b64, Base64.DEFAULT)
                 val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
@@ -152,9 +149,9 @@ class SearchExpensesActivity : BaseActivity() {
             }
         }
 
-        // 2) show category totals
-        val catTotals = filtered.groupBy { it.description.split(" - ").firstOrNull() ?: "Other" }
+        val catTotals = filtered.groupBy { it.category.ifBlank { "Other" } }
             .mapValues { entry -> entry.value.sumOf { it.amount } }
+
         totalsRV.adapter = SearchCategoryAdapter(catTotals)
     }
 }

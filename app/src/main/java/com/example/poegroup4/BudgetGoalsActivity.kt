@@ -1,5 +1,6 @@
 package com.example.poegroup4
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -58,18 +59,23 @@ class BudgetGoalsActivity : BaseActivity()
                 override fun onDataChange(snapshot: DataSnapshot) {
                     categoryList.clear()
                     for (categorySnap in snapshot.children) {
-                        // Trim whitespace in catName
                         val name = categorySnap.child("catName").getValue(String::class.java)?.trim()
                         name?.let { categoryList.add(it) }
                     }
 
                     if (categoryList.isEmpty()) {
-                        categoryList.add("No categories available")
-                        usercategories.isEnabled = false
-                    } else {
-                        usercategories.isEnabled = true
+                        Toast.makeText(
+                            this@BudgetGoalsActivity,
+                            "Please add a category first",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        val intent = Intent(this@BudgetGoalsActivity, AddCategories::class.java)
+                        startActivity(intent)
+                        finish()
+                        return
                     }
 
+                    usercategories.isEnabled = true
 
                     val adapter = object : ArrayAdapter<String>(
                         this@BudgetGoalsActivity,
@@ -78,13 +84,13 @@ class BudgetGoalsActivity : BaseActivity()
                     ) {
                         override fun getView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup): android.view.View {
                             val view = super.getView(position, convertView, parent) as TextView
-                            view.setTextColor(Color.BLACK)  // Set text color to black
+                            view.setTextColor(Color.BLACK)
                             return view
                         }
 
                         override fun getDropDownView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup): android.view.View {
                             val view = super.getDropDownView(position, convertView, parent) as TextView
-                            view.setTextColor(Color.WHITE)  // Set text color to white
+                            view.setTextColor(Color.WHITE)
                             return view
                         }
                     }
@@ -100,7 +106,14 @@ class BudgetGoalsActivity : BaseActivity()
 
 
 
+
     private fun saveGoal() {
+
+        if (!usercategories.isEnabled || categoryList.isEmpty()) {
+            Toast.makeText(this, "No valid category selected. Please add one first.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val selectedCategory = usercategories.selectedItem?.toString()
         val minBudgetText = minBudgetEditText.text.toString().trim()
         val maxBudgetText = maxBudgetEditText.text.toString().trim()

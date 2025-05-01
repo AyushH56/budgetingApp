@@ -69,9 +69,19 @@ class SearchExpensesActivity : BaseActivity() {
     }
 
     private fun reloadAndDisplay() {
-        // Determine cutoff
-        val now = System.currentTimeMillis()
         val checked = periodGroup.checkedRadioButtonId
+
+        // Validation: check if a time period was selected
+        if (checked == -1) {
+            AlertDialog.Builder(this)
+                .setTitle("Validation Error")
+                .setMessage("Please select a time period before searching.")
+                .setPositiveButton("OK", null)
+                .show()
+            return
+        }
+
+        val now = System.currentTimeMillis()
         val cutoff = Calendar.getInstance().apply {
             when (checked) {
                 R.id.radioLastWeek -> add(Calendar.DAY_OF_YEAR, -7)
@@ -80,20 +90,47 @@ class SearchExpensesActivity : BaseActivity() {
             }
         }.timeInMillis
 
-        // Fetch all once
         db.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snap: DataSnapshot) {
                 allTx.clear()
+
+                if (!snap.exists()) {
+                    AlertDialog.Builder(this@SearchExpensesActivity)
+                        .setTitle("No Data")
+                        .setMessage("No transactions found for the selected period.")
+                        .setPositiveButton("OK", null)
+                        .show()
+                    displayFiltered()
+                    return
+                }
+
                 for (c in snap.children) {
                     c.getValue(Transaction::class.java)?.let {
                         if (it.timestamp >= cutoff) allTx.add(it)
                     }
                 }
+
+                if (allTx.isEmpty()) {
+                    AlertDialog.Builder(this@SearchExpensesActivity)
+                        .setTitle("No Results")
+                        .setMessage("No transactions match your criteria.")
+                        .setPositiveButton("OK", null)
+                        .show()
+                }
+
                 displayFiltered()
             }
-            override fun onCancelled(e: DatabaseError) {}
+
+            override fun onCancelled(e: DatabaseError) {
+                AlertDialog.Builder(this@SearchExpensesActivity)
+                    .setTitle("Database Error")
+                    .setMessage("Failed to load transactions: ${e.message}")
+                    .setPositiveButton("OK", null)
+                    .show()
+            }
         })
     }
+
 
     private fun displayFiltered() {
         val q = searchEdit.text.toString().lowercase(Locale.getDefault())

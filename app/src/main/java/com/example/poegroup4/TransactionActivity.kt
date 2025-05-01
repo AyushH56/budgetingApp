@@ -131,10 +131,10 @@ class TransactionActivity : BaseActivity() {
                     }
 
                     if (categoryList.isEmpty()) {
-                        categoryList.add("No categories available")
-                        usercategories.isEnabled = false
-                    } else {
-                        usercategories.isEnabled = true
+                        Toast.makeText(this@TransactionActivity, "Please add a category before adding transactions.", Toast.LENGTH_LONG).show()
+                        startActivity(Intent(this@TransactionActivity, AddCategories::class.java))
+                        finish() // Prevents return to transaction screen without categories
+                        return
                     }
 
                     val adapter = ArrayAdapter(
@@ -144,6 +144,8 @@ class TransactionActivity : BaseActivity() {
                     )
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     usercategories.adapter = adapter
+                    usercategories.isEnabled = true
+                    btnSaveExpense.isEnabled = true
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -152,32 +154,57 @@ class TransactionActivity : BaseActivity() {
             })
     }
 
+
     private fun saveExpense() {
         val selectedCategory = usercategories.selectedItem?.toString()
-        val amountText = editAmount.text.toString()
-        val description = editDescription.text.toString()
+        val amountText = editAmount.text.toString().trim()
+        val description = editDescription.text.toString().trim()
+        val startTime = textStartTime.text.toString().trim()
+        val endTime = textEndTime.text.toString().trim()
+        val date = selectedDate
 
-        if (amountText.isBlank() || selectedCategory.isNullOrEmpty()) {
-            Toast.makeText(this, "Please enter an amount and select a category", Toast.LENGTH_SHORT).show()
+        if (selectedCategory.isNullOrBlank()) {
+            Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val amount = amountText.toDouble()
+        if (amountText.isBlank()) {
+            editAmount.error = "Enter amount"
+            return
+        }
+
+        val amount = amountText.toDoubleOrNull()
+        if (amount == null || amount <= 0) {
+            editAmount.error = "Amount must be a positive number"
+            return
+        }
+
+        if (date.isNullOrBlank()) {
+            Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (startTime.isBlank() || endTime.isBlank()) {
+            Toast.makeText(this, "Please select a start and end time", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (description.isBlank()) {
+            editDescription.error = "Enter a description"
+            return
+        }
+
         val roundedAmount = kotlin.math.ceil(amount)
         val emergencyFund = roundedAmount - amount
-        val startTime = textStartTime.text.toString()
-        val endTime = textEndTime.text.toString()
-        val category = selectedCategory
-        val date = selectedDate ?: ""
 
         if (selectedPhotoUri != null) {
-            encodePhotoAndSaveTransaction(amount, roundedAmount, emergencyFund, category, description, startTime, endTime, date, selectedPhotoUri!!)
+            encodePhotoAndSaveTransaction(amount, roundedAmount, emergencyFund, selectedCategory, description, startTime, endTime, date, selectedPhotoUri!!)
         } else {
             val transaction = Transaction(
                 amount = amount,
                 roundedAmount = roundedAmount,
                 emergencyFund = emergencyFund,
-                category = category,
+                category = selectedCategory,
                 description = description,
                 startTime = startTime,
                 endTime = endTime,
@@ -188,6 +215,7 @@ class TransactionActivity : BaseActivity() {
             saveTransactionToDatabase(transaction)
         }
     }
+
 
     private fun encodePhotoAndSaveTransaction(
         amount: Double,

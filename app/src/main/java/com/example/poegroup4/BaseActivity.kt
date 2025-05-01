@@ -35,6 +35,7 @@ open class BaseActivity : AppCompatActivity() {
         navList = findViewById(R.id.navList)
         val navItems = arrayOf(
             "Home Page",
+            "Overview",
             "Categories",
             "Transactions",
             "Budget Goals",
@@ -52,19 +53,20 @@ open class BaseActivity : AppCompatActivity() {
         navList.setOnItemClickListener { _, _, position, _ ->
             when (position) {
                 0 -> startActivity(Intent(this, MainActivity::class.java))
-                1 -> startActivity(Intent(this, AddCategories::class.java))
-                2 -> startActivity(Intent(this, TransactionActivity::class.java))
-                3 -> startActivity(Intent(this, BudgetGoalsActivity::class.java))
-                4 -> startActivity(Intent(this, SearchCategoryActivity::class.java))
-                5 -> startActivity(Intent(this, SearchExpensesActivity::class.java))
+                1 -> Toast.makeText(this, "Overview - not implemented as yet.", Toast.LENGTH_SHORT).show()
+                2 -> startActivity(Intent(this, AddCategories::class.java))
+                3 -> startActivity(Intent(this, TransactionActivity::class.java))
+                4 -> startActivity(Intent(this, BudgetGoalsActivity::class.java))
+                5 -> startActivity(Intent(this, SearchCategoryActivity::class.java))
+                6 -> startActivity(Intent(this, SearchExpensesActivity::class.java))
 
                 // POE Part 3 features (Coming Soon)
-                6 -> Toast.makeText(this, "My Tree (Coming Soon).", Toast.LENGTH_SHORT).show()
-                7 -> Toast.makeText(this, "Analytics (Coming Soon).", Toast.LENGTH_SHORT).show()
-                8 -> Toast.makeText(this, "Progress Dashboard (Coming Soon).", Toast.LENGTH_SHORT).show()
+                7 -> Toast.makeText(this, "My Tree (Coming Soon).", Toast.LENGTH_SHORT).show()
+                8 -> Toast.makeText(this, "Analytics (Coming Soon).", Toast.LENGTH_SHORT).show()
+                9 -> Toast.makeText(this, "Progress Dashboard (Coming Soon).", Toast.LENGTH_SHORT).show()
 
                 // Done and Implemented Logout feature
-                9 -> logoutUser()
+                10 -> logoutUser()
             }
             drawerLayout.closeDrawers()
         }

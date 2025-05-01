@@ -28,6 +28,8 @@ class SearchCategoryActivity : BaseActivity()
         // Inflating the layout properly
         layoutInflater.inflate(R.layout.activity_category_spending, findViewById(R.id.content_frame))
 
+        supportActionBar?.title = "Search Category Spending"
+
         periodRadioGroup = findViewById(R.id.periodRadioGroup)
         totalSpentTextView = findViewById(R.id.totalSpentTextView)
         recyclerView = findViewById(R.id.categoryBreakdownRecyclerView)

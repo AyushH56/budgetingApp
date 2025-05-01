@@ -9,6 +9,7 @@ data class Transaction(
     val startTime: String = "",
     val endTime: String = "",
     val date: String = "",
-    val photoUrl: String? = null,
+    val photoBase64: String? = null,
     val timestamp: Long = System.currentTimeMillis()
 )
+

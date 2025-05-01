@@ -69,10 +69,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Search"
-
             android:padding="16dp"
             android:textSize="16sp"
-
             android:drawablePadding="8dp"
             android:layout_marginBottom="24dp"/>
 
@@ -85,88 +83,19 @@
             android:textColor="#000000"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Expense Item 1 -->
-        <LinearLayout
+        <!-- RecyclerView for displaying the expenses -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/expenseRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginBottom="24dp"/>
 
-            android:padding="16dp"
-            android:layout_marginBottom="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Groceries"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Food"
-                android:textSize="16sp"
-                android:textColor="#555555"
-                android:layout_marginTop="4dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="R1000"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginTop="8dp"
-                android:gravity="end"/>
-        </LinearLayout>
-
-        <!-- Expense Item 2 -->
-        <LinearLayout
+        <!-- RecyclerView for displaying the Categories -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categoryTotalsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-
-            android:padding="16dp"
-            android:layout_marginBottom="24dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Petrol"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Transportation"
-                android:textSize="16sp"
-                android:textColor="#555555"
-                android:layout_marginTop="4dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="R500"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginTop="8dp"
-                android:gravity="end"/>
-        </LinearLayout>
-
-        <!-- View Photos Button -->
-        <Button
-            android:id="@+id/viewPhotosButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="View Previously Uploaded Photos"
-            android:textSize="16sp"
-            android:paddingVertical="12dp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"/>
+            android:nestedScrollingEnabled="false"/>
 
     </LinearLayout>
 </ScrollView>

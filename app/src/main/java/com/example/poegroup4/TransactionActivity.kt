@@ -3,14 +3,16 @@ package com.example.poegroup4
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 class TransactionActivity : BaseActivity() {
@@ -169,7 +171,7 @@ class TransactionActivity : BaseActivity() {
         val date = selectedDate ?: ""
 
         if (selectedPhotoUri != null) {
-            uploadPhotoAndSaveTransaction(amount, roundedAmount, emergencyFund, category, description, startTime, endTime, date, selectedPhotoUri!!)
+            encodePhotoAndSaveTransaction(amount, roundedAmount, emergencyFund, category, description, startTime, endTime, date, selectedPhotoUri!!)
         } else {
             val transaction = Transaction(
                 amount = amount,
@@ -180,14 +182,14 @@ class TransactionActivity : BaseActivity() {
                 startTime = startTime,
                 endTime = endTime,
                 date = date,
-                photoUrl = null,
+                photoBase64 = null,
                 timestamp = System.currentTimeMillis()
             )
             saveTransactionToDatabase(transaction)
         }
     }
 
-    private fun uploadPhotoAndSaveTransaction(
+    private fun encodePhotoAndSaveTransaction(
         amount: Double,
         roundedAmount: Double,
         emergencyFund: Double,
@@ -198,30 +200,36 @@ class TransactionActivity : BaseActivity() {
         date: String,
         photoUri: Uri
     ) {
-        val photoRef = FirebaseStorage.getInstance().reference
-            .child("transaction_photos/${System.currentTimeMillis()}.jpg")
+        val photoBase64 = encodeImageToBase64(photoUri)
 
-        photoRef.putFile(photoUri)
-            .addOnSuccessListener {
-                photoRef.downloadUrl.addOnSuccessListener { uri ->
-                    val transaction = Transaction(
-                        amount = amount,
-                        roundedAmount = roundedAmount,
-                        emergencyFund = emergencyFund,
-                        category = category,
-                        description = description,
-                        startTime = startTime,
-                        endTime = endTime,
-                        date = date,
-                        photoUrl = uri.toString(),
-                        timestamp = System.currentTimeMillis()
-                    )
-                    saveTransactionToDatabase(transaction)
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Photo upload failed", Toast.LENGTH_SHORT).show()
-            }
+        val transaction = Transaction(
+            amount = amount,
+            roundedAmount = roundedAmount,
+            emergencyFund = emergencyFund,
+            category = category,
+            description = description,
+            startTime = startTime,
+            endTime = endTime,
+            date = date,
+            photoBase64 = photoBase64,
+            timestamp = System.currentTimeMillis()
+        )
+
+        saveTransactionToDatabase(transaction)
+    }
+
+    private fun encodeImageToBase64(uri: Uri): String? {
+        return try {
+            val inputStream = contentResolver.openInputStream(uri)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream)
+            val imageBytes = outputStream.toByteArray()
+            Base64.encodeToString(imageBytes, Base64.NO_WRAP)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
     private fun saveTransactionToDatabase(transaction: Transaction) {
@@ -253,4 +261,3 @@ class TransactionActivity : BaseActivity() {
         }
     }
 }
-

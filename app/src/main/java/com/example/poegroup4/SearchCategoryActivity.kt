@@ -88,7 +88,8 @@ class SearchCategoryActivity : BaseActivity() {
                                 val category = transaction.category.ifBlank { "Other" }
                                 totalSpent += transaction.amount
                                 // Sum amounts by category
-                                categoryMap[category] = categoryMap.getOrDefault(category, 0.0) + transaction.amount
+                                categoryMap[category] =
+                                    categoryMap.getOrDefault(category, 0.0) + transaction.amount
                             }
                         } catch (e: Exception) {
                             // Ignore transactions with invalid dates
@@ -99,13 +100,13 @@ class SearchCategoryActivity : BaseActivity() {
                 // Display results
                 if (categoryMap.isEmpty()) {
                     totalSpentTextView.text = "No transactions found for this period"
+
                     recyclerView.adapter = null
                 } else {
                     totalSpentTextView.text = "Total Spent: R${totalSpent}"
                     recyclerView.adapter = SearchCategoryAdapter(categoryMap)
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 // Handle database read error
                 totalSpentTextView.text = "Failed to load data"
@@ -113,4 +114,5 @@ class SearchCategoryActivity : BaseActivity() {
             }
         })
     }
-}
+    }
+

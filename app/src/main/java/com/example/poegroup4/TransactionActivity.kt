@@ -17,7 +17,6 @@ import java.util.*
 
 class TransactionActivity : BaseActivity() {
 
-    // UI elements
     private lateinit var usercategories: Spinner
     private lateinit var editAmount: EditText
     private lateinit var editDescription: EditText
@@ -27,26 +26,23 @@ class TransactionActivity : BaseActivity() {
     private lateinit var btnUploadPhoto: Button
     private lateinit var btnSaveExpense: Button
 
-    // Firebase references
     private lateinit var database: DatabaseReference
     private lateinit var user: FirebaseUser
 
-    // Data holders
     private val categoryList = mutableListOf<String>()
     private var selectedPhotoUri: Uri? = null
     private var selectedDate: String? = null
 
     companion object {
-        const val PICK_IMAGE_REQUEST = 101 // Request code for image selection
+        const val PICK_IMAGE_REQUEST = 101
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         layoutInflater.inflate(R.layout.activity_transactions, findViewById(R.id.content_frame))
 
-        supportActionBar?.title = "Transactions" // Set toolbar title
+        supportActionBar?.title = "Transactions"
 
-        // Initialize UI components
         usercategories = findViewById(R.id.categorySpinner)
         editAmount = findViewById(R.id.edit_amount)
         editDescription = findViewById(R.id.edit_description)
@@ -56,25 +52,21 @@ class TransactionActivity : BaseActivity() {
         btnUploadPhoto = findViewById(R.id.btn_upload_photo)
         btnSaveExpense = findViewById(R.id.btn_save_expense)
 
-        // Set up Firebase user and database reference
         user = FirebaseAuth.getInstance().currentUser!!
         database = FirebaseDatabase.getInstance().reference
 
-        loadCategories() // Load categories from Firebase
+        loadCategories()
 
-        // Image picker trigger
         btnUploadPhoto.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
         }
 
-        // Save expense button click
         btnSaveExpense.setOnClickListener {
             saveExpense()
         }
 
-        // Time pickers for start and end time
         textStartTime.setOnClickListener {
             showTimePickerDialog { hour, minute ->
                 textStartTime.text = String.format("%02d:%02d", hour, minute)
@@ -87,18 +79,15 @@ class TransactionActivity : BaseActivity() {
             }
         }
 
-        // Date picker
         textDate.setOnClickListener {
             showDatePickerDialog()
         }
 
-        // Default values
         textStartTime.text = "09:00"
         textEndTime.text = "10:00"
         textDate.text = "Select Date"
     }
 
-    // Show date picker dialog and update selectedDate
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -116,7 +105,6 @@ class TransactionActivity : BaseActivity() {
         datePickerDialog.show()
     }
 
-    // Show time picker dialog with callback
     private fun showTimePickerDialog(onTimeSet: (hourOfDay: Int, minute: Int) -> Unit) {
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -130,7 +118,6 @@ class TransactionActivity : BaseActivity() {
         timePickerDialog.show()
     }
 
-    // Load categories from Firebase under current user
     private fun loadCategories() {
         val userId = user.uid
         database.child("categories")
@@ -143,15 +130,13 @@ class TransactionActivity : BaseActivity() {
                         name?.let { categoryList.add(it) }
                     }
 
-                    // If no categories found, redirect user to create some
                     if (categoryList.isEmpty()) {
-                        Toast.makeText(this@TransactionActivity, "Please add a category before adding transactions.", Toast.LENGTH_LONG).show()
-                        startActivity(Intent(this@TransactionActivity, AddCategories::class.java))
-                        finish()
-                        return
+                        categoryList.add("No categories available")
+                        usercategories.isEnabled = false
+                    } else {
+                        usercategories.isEnabled = true
                     }
 
-                    // Populate spinner with categories
                     val adapter = ArrayAdapter(
                         this@TransactionActivity,
                         android.R.layout.simple_spinner_item,
@@ -159,8 +144,6 @@ class TransactionActivity : BaseActivity() {
                     )
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     usercategories.adapter = adapter
-                    usercategories.isEnabled = true
-                    btnSaveExpense.isEnabled = true
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -169,155 +152,43 @@ class TransactionActivity : BaseActivity() {
             })
     }
 
-    // Validates inputs, checks budget, and saves expense
     private fun saveExpense() {
         val selectedCategory = usercategories.selectedItem?.toString()
-        val amountText = editAmount.text.toString().trim()
-        val description = editDescription.text.toString().trim()
-        val startTime = textStartTime.text.toString().trim()
-        val endTime = textEndTime.text.toString().trim()
-        val date = selectedDate
+        val amountText = editAmount.text.toString()
+        val description = editDescription.text.toString()
 
-        // Input validation
-        if (selectedCategory.isNullOrBlank()) {
-            Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
+        if (amountText.isBlank() || selectedCategory.isNullOrEmpty()) {
+            Toast.makeText(this, "Please enter an amount and select a category", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if (amountText.isBlank()) {
-            editAmount.error = "Enter amount"
-            return
-        }
-
-        val amount = amountText.toDoubleOrNull()
-        if (amount == null || amount <= 0) {
-            editAmount.error = "Amount must be a positive number"
-            return
-        }
-
-        if (date.isNullOrBlank()) {
-            Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        if (startTime.isBlank() || endTime.isBlank()) {
-            Toast.makeText(this, "Please select a start and end time", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        if (description.isBlank()) {
-            editDescription.error = "Enter a description"
-            return
-        }
-
-        // Calculate rounding and emergency fund
+        val amount = amountText.toDouble()
         val roundedAmount = kotlin.math.ceil(amount)
         val emergencyFund = roundedAmount - amount
+        val startTime = textStartTime.text.toString()
+        val endTime = textEndTime.text.toString()
+        val category = selectedCategory
+        val date = selectedDate ?: ""
 
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        val calendar = Calendar.getInstance()
-        val currentMonth = calendar.get(Calendar.MONTH) + 1
-        val currentYear = calendar.get(Calendar.YEAR)
-
-        // Reference to user transactions
-        val transactionRef = FirebaseDatabase.getInstance()
-            .getReference("users")
-            .child(userId)
-            .child("transactions")
-
-        transactionRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var totalForMonth = 0.0
-
-                // Calculate total spent in this category this month
-                for (transactionSnap in snapshot.children) {
-                    val transCategory = transactionSnap.child("category").getValue(String::class.java)
-                    val transDate = transactionSnap.child("date").getValue(String::class.java)
-                    val transAmount = transactionSnap.child("amount").getValue(Double::class.java) ?: 0.0
-
-                    if (transCategory == selectedCategory && transDate != null) {
-                        val parts = transDate.split("/")
-                        if (parts.size == 3) {
-                            val month = parts[1].toIntOrNull()
-                            val year = parts[2].toIntOrNull()
-                            if (month == currentMonth && year == currentYear) {
-                                totalForMonth += transAmount
-                            }
-                        }
-                    }
-                }
-
-                // Get the user's budget for this category
-                val budgetRef = FirebaseDatabase.getInstance()
-                    .getReference("budgetGoals")
-                    .child(userId)
-
-                budgetRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(goalSnapshot: DataSnapshot) {
-                        var budgetLimit = Double.MAX_VALUE
-                        for (goal in goalSnapshot.children) {
-                            val category = goal.child("category").getValue(String::class.java)
-                            val maxBudget = goal.child("maxBudget").getValue(Double::class.java)
-                            if (category == selectedCategory && maxBudget != null) {
-                                budgetLimit = maxBudget
-                                break
-                            }
-                        }
-
-                        // Show warning if user exceeds budget
-                        if ((totalForMonth + amount) > budgetLimit) {
-                            Toast.makeText(
-                                this@TransactionActivity,
-                                "⚠️ Warning: This will exceed your budget for $selectedCategory!",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-
-                        // Build transaction object
-                        val transaction = Transaction(
-                            amount = amount,
-                            roundedAmount = roundedAmount,
-                            emergencyFund = emergencyFund,
-                            category = selectedCategory,
-                            description = description,
-                            startTime = startTime,
-                            endTime = endTime,
-                            date = date,
-                            photoBase64 = null,
-                            timestamp = System.currentTimeMillis()
-                        )
-
-                        // Handle photo encoding if photo was uploaded
-                        if (selectedPhotoUri != null) {
-                            encodePhotoAndSaveTransaction(
-                                amount,
-                                roundedAmount,
-                                emergencyFund,
-                                selectedCategory,
-                                description,
-                                startTime,
-                                endTime,
-                                date,
-                                selectedPhotoUri!!
-                            )
-                        } else {
-                            saveTransactionToDatabase(transaction)
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Toast.makeText(this@TransactionActivity, "Failed to load budget goal", Toast.LENGTH_SHORT).show()
-                    }
-                })
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@TransactionActivity, "Failed to check transactions", Toast.LENGTH_SHORT).show()
-            }
-        })
+        if (selectedPhotoUri != null) {
+            encodePhotoAndSaveTransaction(amount, roundedAmount, emergencyFund, category, description, startTime, endTime, date, selectedPhotoUri!!)
+        } else {
+            val transaction = Transaction(
+                amount = amount,
+                roundedAmount = roundedAmount,
+                emergencyFund = emergencyFund,
+                category = category,
+                description = description,
+                startTime = startTime,
+                endTime = endTime,
+                date = date,
+                photoBase64 = null,
+                timestamp = System.currentTimeMillis()
+            )
+            saveTransactionToDatabase(transaction)
+        }
     }
 
-    // Encodes image from URI to base64 and saves transaction
     private fun encodePhotoAndSaveTransaction(
         amount: Double,
         roundedAmount: Double,
@@ -347,7 +218,6 @@ class TransactionActivity : BaseActivity() {
         saveTransactionToDatabase(transaction)
     }
 
-    // Helper method to encode image as base64 string
     private fun encodeImageToBase64(uri: Uri): String? {
         return try {
             val inputStream = contentResolver.openInputStream(uri)
@@ -362,22 +232,32 @@ class TransactionActivity : BaseActivity() {
         }
     }
 
-    // Save transaction object to Firebase database
     private fun saveTransactionToDatabase(transaction: Transaction) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        val transactionRef = FirebaseDatabase.getInstance()
+        val dbRef = FirebaseDatabase.getInstance()
             .getReference("users")
             .child(userId)
             .child("transactions")
-            .push()
 
-        transactionRef.setValue(transaction).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(this, "Transaction saved successfully!", Toast.LENGTH_SHORT).show()
-                finish() // Return to previous screen
-            } else {
+        val transactionId = dbRef.push().key ?: return
+
+        dbRef.child(transactionId)
+            .setValue(transaction)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Transaction saved!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .addOnFailureListener {
                 Toast.makeText(this, "Failed to save transaction", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+            selectedPhotoUri = data?.data
+            Toast.makeText(this, "Photo selected!", Toast.LENGTH_SHORT).show()
         }
     }
 }

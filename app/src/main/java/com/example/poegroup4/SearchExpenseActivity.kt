@@ -3,6 +3,8 @@ package com.example.poegroup4
 import android.app.AlertDialog
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
@@ -14,15 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.poegroup4.adapters.ExpenseAdapter
 import com.example.poegroup4.adapters.SearchCategoryAdapter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class SearchExpensesActivity : BaseActivity() {
 
@@ -36,6 +32,11 @@ class SearchExpensesActivity : BaseActivity() {
     private val allTx = mutableListOf<Transaction>()
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private lateinit var cutoffDate: Date
+
+    // Debounce handler
+    private val handler = Handler(Looper.getMainLooper())
+    private var searchRunnable: Runnable? = null
+    private var justReloaded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,9 +61,13 @@ class SearchExpensesActivity : BaseActivity() {
 
         searchEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                displayFiltered()
+                searchRunnable?.let { handler.removeCallbacks(it) }
+                searchRunnable = Runnable { displayFiltered() }
+                handler.postDelayed(searchRunnable!!, 500) // 500ms delay after user stops typing
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
     }
@@ -81,7 +86,6 @@ class SearchExpensesActivity : BaseActivity() {
             return
         }
 
-        // Calculate cutoff date based on selected period
         val calendar = Calendar.getInstance()
         when (checked) {
             R.id.radioLastWeek -> calendar.add(Calendar.DAY_OF_YEAR, -7)
@@ -98,6 +102,7 @@ class SearchExpensesActivity : BaseActivity() {
                         allTx.add(it)
                     }
                 }
+                justReloaded = true
                 displayFiltered()
             }
 
@@ -124,17 +129,18 @@ class SearchExpensesActivity : BaseActivity() {
                     val matchesSearch = query.isEmpty() || transaction.description.lowercase().contains(query)
                     matchesPeriod && matchesSearch
                 } catch (e: Exception) {
-                    false // Skip if date parsing fails
+                    false
                 }
             }
         }
 
-        if (filtered.isEmpty() && periodGroup.checkedRadioButtonId != -1) {
+        if (filtered.isEmpty() && periodGroup.checkedRadioButtonId != -1 && justReloaded) {
             AlertDialog.Builder(this)
                 .setTitle("No Results")
                 .setMessage("No transactions match your search.")
                 .setPositiveButton("OK", null)
                 .show()
+            justReloaded = false
         }
 
         expensesRV.adapter = ExpenseAdapter(filtered) { tx ->

@@ -1,5 +1,6 @@
 package com.example.poegroup4
 
+//Data class for Overview
 data class OverviewItem(
     val category: String = "",
     val month: String = "",

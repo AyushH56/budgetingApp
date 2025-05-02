@@ -1,5 +1,6 @@
 package com.example.poegroup4
 
+// Data class for storing Transactions in Db
 data class Transaction(
     val amount: Double = 0.0,
     val roundedAmount: Double = 0.0,

@@ -32,9 +32,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = CardAdapter(cards) { title ->
             when (title) {
-                "Overview" -> {
-                    Toast.makeText(this, "$title - not yet implemented.", Toast.LENGTH_SHORT).show()
-                }
+                "Overview" -> startActivity(Intent(this, OverviewActivity::class.java))
                 "Categories" -> startActivity(Intent(this, AddCategories::class.java))
                 "Transactions" -> startActivity(Intent(this, TransactionActivity::class.java))
                 "Budget Goals" -> startActivity(Intent(this, BudgetGoalsActivity::class.java))

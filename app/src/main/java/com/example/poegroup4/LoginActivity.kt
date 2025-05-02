@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             if (!validatePassword(password)) {
-                Toast.makeText(this, "Password must be at least 6 characters!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Password must be at least 8 characters!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -54,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(Intent(this, MainActivity::class.java))
                         finish()
                     } else {
-                        Toast.makeText(this, "Login Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Login Failed, please try again", Toast.LENGTH_SHORT).show()
                     }
                 }
         }
@@ -72,6 +72,6 @@ class LoginActivity : AppCompatActivity() {
 
     // Validate password length
     private fun validatePassword(password: String): Boolean {
-        return password.isNotEmpty() && password.length >= 6
+        return password.isNotEmpty() && password.length >= 8
     }
 }

@@ -30,7 +30,7 @@ class SearchCategoryAdapter(
         val category = categoryMap.keys.elementAt(position) // Get the category at the current position
         val amount = categoryMap[category] ?: 0.0 // Get the amount for the category, default to 0 if null
         holder.categoryName.text = category // Set the category name text
-        holder.categoryAmount.text = "R$${amount}" // Set the amount text, formatted as currency
+        holder.categoryAmount.text = "R${amount}" // Set the amount text, formatted as currency
     }
 
     // Returns the number of items in the map (category-count pairs)

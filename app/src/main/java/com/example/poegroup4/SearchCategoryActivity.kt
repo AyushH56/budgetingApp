@@ -101,7 +101,7 @@ class SearchCategoryActivity : BaseActivity() {
                     totalSpentTextView.text = "No transactions found for this period"
                     recyclerView.adapter = null
                 } else {
-                    totalSpentTextView.text = "Total Spent: R$totalSpent"
+                    totalSpentTextView.text = "Total Spent: R${totalSpent}"
                     recyclerView.adapter = SearchCategoryAdapter(categoryMap)
                 }
             }

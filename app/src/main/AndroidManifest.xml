@@ -46,6 +46,10 @@
         <activity android:name=".SearchExpensesActivity" />
         <activity android:name=".OverviewActivity" />
 
+        <activity android:name=".MyTreeActivity" />
+        <activity android:name=".AnalyticsActivity" />
+        <activity android:name=".ProgressDashboardActivity" />
+
 
     </application>
 

@@ -29,6 +29,9 @@ class BudgetGoalsActivity : BaseActivity() {
         // Inflate layout into the base activity's content frame
         layoutInflater.inflate(R.layout.activity_budget_goals, findViewById(R.id.content_frame))
 
+        // Set title in the top app bar
+        supportActionBar?.title = "Budget Goals"
+
         // Link UI components to their XML counterparts
         usercategories = findViewById(R.id.categorySpinner)
         minBudgetEditText = findViewById(R.id.edit_min_goal)

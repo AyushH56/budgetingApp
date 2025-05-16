@@ -43,13 +43,16 @@ class MainActivity : AppCompatActivity() {
                 "Budget Goals" -> startActivity(Intent(this, BudgetGoalsActivity::class.java))
                 "Category Spending" -> startActivity(Intent(this, SearchCategoryActivity::class.java))
                 "Search Expenses" -> startActivity(Intent(this, SearchExpensesActivity::class.java))
+                "My Tree" -> startActivity(Intent(this, MyTreeActivity::class.java))
+                "Analytics" -> startActivity(Intent(this, AnalyticsActivity::class.java))
+                "Progress Dashboard" -> startActivity(Intent(this, ProgressDashboardActivity::class.java))
 
                 // For features not yet implemented, show a "Coming Soon" toast
-                "My Tree",
-                "Analytics",
-                "Progress Dashboard" -> {
-                    Toast.makeText(this, "$title (Coming Soon).", Toast.LENGTH_SHORT).show()
-                }
+//                "My Tree",
+//                "Analytics",
+//                "Progress Dashboard" -> {
+//                    Toast.makeText(this, "$title (Coming Soon).", Toast.LENGTH_SHORT).show()
+//                }
 
                 // If user selects "Logout", call logoutUser() method
                 "Logout" -> logoutUser()

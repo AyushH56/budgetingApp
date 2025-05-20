@@ -1,6 +1,7 @@
 package com.example.poegroup4
 
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,38 +12,31 @@ import java.util.*
 
 class OverviewActivity : BaseActivity() {
 
-    // UI components and data adapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: OverviewAdapter
+    private lateinit var tvEmergencyFundTotal: TextView
 
-    // List that holds items to display in the overview
     private val overviewItems = mutableListOf<OverviewItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inflate this activity into the BaseActivity layout
+        // Inflate the layout into BaseActivity’s content frame
         layoutInflater.inflate(R.layout.activity_overview, findViewById(R.id.content_frame))
 
-        // Set toolbar title
         supportActionBar?.title = "Overview"
 
-        // Initialize RecyclerView
+        // UI references
         recyclerView = findViewById(R.id.recyclerOverview)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        tvEmergencyFundTotal = findViewById(R.id.tvEmergencyFundTotal)
 
-        // Set adapter to the RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = OverviewAdapter(overviewItems)
         recyclerView.adapter = adapter
 
-        // Fetch data from Firebase to display
         fetchOverviewData()
     }
 
-    /**
-     * Retrieves the user's budget goals and transaction data for the current month
-     * from Firebase, then calculates total spending per category and updates the RecyclerView.
-     */
     private fun fetchOverviewData() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val database = FirebaseDatabase.getInstance()
@@ -67,9 +61,17 @@ class OverviewActivity : BaseActivity() {
                 transactionRef.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(transSnapshot: DataSnapshot) {
                         overviewItems.clear()
+                        var totalEmergencyFund = 0.0
 
                         val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
+                        // First pass: sum all emergency funds only once
+                        for (transSnap in transSnapshot.children) {
+                            val emergencyFund = transSnap.child("emergencyFund").getValue(Double::class.java) ?: 0.0
+                            totalEmergencyFund += emergencyFund
+                        }
+
+                        // Second pass: group transactions by category for current month/year
                         for ((category, minBudget, maxBudget) in budgets) {
                             var totalSpent = 0.0
 
@@ -92,7 +94,6 @@ class OverviewActivity : BaseActivity() {
                                             totalSpent += transAmount
                                         }
                                     } catch (e: Exception) {
-                                        // Log error or show a message if needed
                                         e.printStackTrace()
                                     }
                                 }
@@ -109,6 +110,9 @@ class OverviewActivity : BaseActivity() {
                             )
                         }
 
+                        // Display emergency fund total
+                        tvEmergencyFundTotal.text = "Emergency Fund Total: R${"%.2f".format(totalEmergencyFund)}"
+
                         adapter.notifyDataSetChanged()
                     }
 
@@ -123,5 +127,4 @@ class OverviewActivity : BaseActivity() {
             }
         })
     }
-
 }

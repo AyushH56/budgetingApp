@@ -58,7 +58,7 @@
 
         <activity android:name=".MyTreeActivity" />
         <activity android:name=".AnalyticsActivity" />
-        <activity android:name=".ProgressDashboardActivity" />
+        <activity android:name=".ProgressDashboard" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

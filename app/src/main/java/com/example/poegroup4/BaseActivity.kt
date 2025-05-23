@@ -61,7 +61,7 @@ open class BaseActivity : AppCompatActivity() {
                 6 -> startActivity(Intent(this, SearchExpensesActivity::class.java))
                 7 -> startActivity(Intent(this, MyTreeActivity::class.java))
                 8 -> startActivity(Intent(this, AnalyticsActivity::class.java))
-                9 -> startActivity(Intent(this, ProgressDashboardActivity::class.java))
+                9 -> startActivity(Intent(this, ProgressDashboard::class.java))
 
                 // POE Part 3 features (Coming Soon)
 //                7 -> Toast.makeText(this, "My Tree (Coming Soon).", Toast.LENGTH_SHORT).show()

@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 "Search Expenses" -> startActivity(Intent(this, SearchExpensesActivity::class.java))
                 "My Tree" -> startActivity(Intent(this, MyTreeActivity::class.java))
                 "Analytics" -> startActivity(Intent(this, AnalyticsActivity::class.java))
-                "Progress Dashboard" -> startActivity(Intent(this, ProgressDashboardActivity::class.java))
+                "Progress Dashboard" -> startActivity(Intent(this, ProgressDashboard::class.java))
 
                 // For features not yet implemented, show a "Coming Soon" toast
 //                "My Tree",

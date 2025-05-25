@@ -5,16 +5,19 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import com.example.poegroup4.views.*
-import java.text.SimpleDateFormat
-import java.util.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AnalyticsActivity : BaseActivity() {
 
     private lateinit var periodGroup: RadioGroup
     private lateinit var graphContainer: LinearLayout
     private lateinit var selectedDateText: TextView
+    private lateinit var db: DatabaseReference
+    private val auth = FirebaseAuth.getInstance()
+    private val allRecords = mutableListOf<SpendingRecord>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +28,13 @@ class AnalyticsActivity : BaseActivity() {
         graphContainer = findViewById(R.id.graphContainer)
         selectedDateText = findViewById(R.id.selectedDateText)
 
+        db = FirebaseDatabase.getInstance()
+            .getReference("users")
+            .child(auth.currentUser!!.uid)
+            .child("transactions")
+
         setupRadioGroup()
-        loadGraphs("Last Week")
+        fetchDataAndLoadGraphs("Last Week")
     }
 
     private fun setupRadioGroup() {
@@ -37,29 +45,70 @@ class AnalyticsActivity : BaseActivity() {
                 R.id.radioLastQuarter -> "Last Quarter"
                 else -> "Last Week"
             }
-            loadGraphs(period)
+            fetchDataAndLoadGraphs(period)
         }
+    }
+
+    private fun fetchDataAndLoadGraphs(period: String) {
+        db.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                allRecords.clear()
+                for (transaction in snapshot.children) {
+                    val category = transaction.child("category").getValue(String::class.java) ?: continue
+                    val amount = transaction.child("amount").getValue(Double::class.java) ?: continue
+                    val dateString = transaction.child("date").getValue(String::class.java) ?: continue
+
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    val date = try {
+                        dateFormat.parse(dateString)
+                    } catch (e: Exception) {
+                        null
+                    } ?: continue
+
+                    allRecords.add(SpendingRecord(category, amount, date))
+                }
+
+                loadGraphs(period)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@AnalyticsActivity, "Failed to load transactions", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun loadGraphs(period: String) {
         graphContainer.removeAllViews()
-        val records = filterRecords(generateDummyRecords(), period)
+        val records = filterRecords(allRecords, period)
 
-        // Create graph views with data
+        if (records.isEmpty()) {
+            selectedDateText.text = "No data available for selected period"
+            return
+        }
+
         val dailySpendingGraph = DailyTrendLineView(this, records)
         val categoryGraph = CategoryBarChartView(this, records)
         val pieChart = CategoryPieChartView(this, records)
 
-        // Update date range info
         val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-        selectedDateText.text = "Data since ${dateFormat.format(records.firstOrNull()?.date ?: Date())}"
+        selectedDateText.text = "Data since ${dateFormat.format(records.first().date)}"
 
-        // Add graphs wrapped in labeled boxes with proper height and margin
         listOf(
             createGraphBox("Spending Trend", dailySpendingGraph),
             createGraphBox("Category Spending", categoryGraph),
             createGraphBox("Category Distribution", pieChart)
         ).forEach { graphContainer.addView(it) }
+    }
+
+    private fun filterRecords(records: List<SpendingRecord>, period: String): List<SpendingRecord> {
+        val calendar = Calendar.getInstance()
+        when (period) {
+            "Last Week" -> calendar.add(Calendar.DAY_OF_YEAR, -7)
+            "Last Month" -> calendar.add(Calendar.MONTH, -1)
+            "Last Quarter" -> calendar.add(Calendar.MONTH, -3)
+        }
+        val startDate = calendar.time
+        return records.filter { it.date.after(startDate) }
     }
 
     private fun createGraphBox(title: String, graph: View): View {
@@ -77,7 +126,6 @@ class AnalyticsActivity : BaseActivity() {
 
             addView(titleText)
 
-            // Set layout params on graph for proper sizing
             graph.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 900
@@ -94,31 +142,6 @@ class AnalyticsActivity : BaseActivity() {
 
         box.layoutParams = params
         return box
-    }
-
-    private fun filterRecords(records: List<SpendingRecord>, period: String): List<SpendingRecord> {
-        val calendar = Calendar.getInstance()
-        when (period) {
-            "Last Week" -> calendar.add(Calendar.DAY_OF_YEAR, -7)
-            "Last Month" -> calendar.add(Calendar.MONTH, -1)
-            "Last Quarter" -> calendar.add(Calendar.MONTH, -3)
-        }
-        val startDate = calendar.time
-        return records.filter { it.date.after(startDate) }
-    }
-
-    // Dummy Data, need to change to pull from Firebase database
-    private fun generateDummyRecords(): List<SpendingRecord> {
-        val categories = listOf("Food", "Transport", "Entertainment", "Rent", "Utilities")
-        val now = Calendar.getInstance()
-        val list = mutableListOf<SpendingRecord>()
-        repeat(90) {
-            now.add(Calendar.DAY_OF_YEAR, -1)
-            val amount = (50..500).random().toDouble()
-            val category = categories.random()
-            list.add(SpendingRecord(category, amount, now.time))
-        }
-        return list
     }
 }
 

@@ -74,7 +74,7 @@ class DailyTrendLineView @JvmOverloads constructor(
             val yVal = tickStep * i
             val yPos = originY - (yVal / maxVal * chartHeight).toFloat()
             canvas.drawLine(originX, yPos, width - chartPadding / 2, yPos, axisPaint)
-            canvas.drawText("$${"%.0f".format(yVal)}", 0f, yPos + 8f, textPaint)
+            canvas.drawText("R${"%.0f".format(yVal)}", 0f, yPos + 8f, textPaint)
         }
 
         // Axes
@@ -110,7 +110,7 @@ class DailyTrendLineView @JvmOverloads constructor(
             paint.color = Color.RED
             canvas.drawCircle(x, y, pointRadius + 4f, paint)
 
-            val label = "${keys[i]}: \$${"%.2f".format(values[i])}"
+            val label = "${keys[i]}: R${"%.2f".format(values[i])}"
             tooltipPaint.textAlign = Paint.Align.LEFT
             val tooltipX = if (x + 200f > width) x - 200f else x + 16f
             canvas.drawText(label, tooltipX, y - 16f, tooltipPaint)

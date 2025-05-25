@@ -85,7 +85,7 @@ class CategoryBarChartView @JvmOverloads constructor(
             val yVal = tickStep * i
             val yPos = originY - (yVal / maxValue * chartHeight).toFloat()
             canvas.drawLine(originX - 8f, yPos, originX, yPos, axisPaint)
-            canvas.drawText("$${"%.0f".format(yVal)}", 12f, yPos + 8f, textPaint)
+            canvas.drawText("R${"%.0f".format(yVal)}", 12f, yPos + 8f, textPaint)
         }
 
         // Bars and X-axis labels
@@ -98,7 +98,7 @@ class CategoryBarChartView @JvmOverloads constructor(
             paint.color = barColors[category] ?: Color.BLUE
             canvas.drawRect(barRect, paint)
 
-            barRects.add(Pair(barRect, "$category: \$${"%.2f".format(amount)}"))
+            barRects.add(Pair(barRect, "$category: R${"%.2f".format(amount)}"))
 
             // Adjusted Y for rotated label to avoid clipping
             drawRotatedText(

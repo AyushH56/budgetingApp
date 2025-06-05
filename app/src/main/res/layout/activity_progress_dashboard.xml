@@ -11,18 +11,31 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Heading -->
-        <TextView
-            android:id="@+id/pieChartHeading"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Spending Overview"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textColor="#000000"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginBottom="32dp">
+
+            <TextView
+                android:id="@+id/headerTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Progress Dashboard"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/treeIcon"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="end|center_vertical"
+                android:src="@drawable/tree_icon"
+                android:contentDescription="Tree Icon"
+                android:background="@android:color/transparent" />
+        </FrameLayout>
+
 
         <!-- Pie Chart -->
         <com.github.mikephil.charting.charts.PieChart

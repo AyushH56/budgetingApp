@@ -12,15 +12,31 @@
         android:padding="24dp">
 
         <!-- Header -->
-        <TextView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search Expenses"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:gravity="center"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="32dp">
+
+            <TextView
+                android:id="@+id/headerTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Search Expenses"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:gravity="center" />
+
+            <ImageView
+                android:id="@+id/treeIcon"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="end|center_vertical"
+                android:src="@drawable/tree_icon"
+                android:contentDescription="Tree Icon"
+                android:background="@android:color/transparent" />
+        </FrameLayout>
+
 
         <!-- Period Selection -->
         <TextView

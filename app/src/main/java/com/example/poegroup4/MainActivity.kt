@@ -20,9 +20,9 @@ class MainActivity : AppCompatActivity() {
         HomeCard("Budget Goals", R.drawable.ic_goals),
         HomeCard("Category Spending", R.drawable.ic_search),
         HomeCard("Search Expenses", R.drawable.ic_expenses),
-        HomeCard("My Tree", R.drawable.ic_tree),
         HomeCard("Analytics", R.drawable.ic_analytics),
         HomeCard("Progress Dashboard", R.drawable.ic_dashboard),
+        // HomeCard("My Tree", R.drawable.ic_tree),
         HomeCard("Logout", R.drawable.ic_logout),
     )
 
@@ -43,16 +43,9 @@ class MainActivity : AppCompatActivity() {
                 "Budget Goals" -> startActivity(Intent(this, BudgetGoalsActivity::class.java))
                 "Category Spending" -> startActivity(Intent(this, SearchCategoryActivity::class.java))
                 "Search Expenses" -> startActivity(Intent(this, SearchExpensesActivity::class.java))
-                "My Tree" -> startActivity(Intent(this, MyTreeActivity::class.java))
                 "Analytics" -> startActivity(Intent(this, AnalyticsActivity::class.java))
                 "Progress Dashboard" -> startActivity(Intent(this, ProgressDashboard::class.java))
-
-                // For features not yet implemented, show a "Coming Soon" toast
-//                "My Tree",
-//                "Analytics",
-//                "Progress Dashboard" -> {
-//                    Toast.makeText(this, "$title (Coming Soon).", Toast.LENGTH_SHORT).show()
-//                }
+                // "My Tree" -> startActivity(Intent(this, MyTreeActivity::class.java))
 
                 // If user selects "Logout", call logoutUser() method
                 "Logout" -> logoutUser()

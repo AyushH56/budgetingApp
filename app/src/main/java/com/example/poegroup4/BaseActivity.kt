@@ -41,9 +41,9 @@ open class BaseActivity : AppCompatActivity() {
             "Budget Goals",
             "Category Spending",
             "Search Expenses",
-            "My Tree",
             "Analytics",
             "Progress Dashboard",
+            // "My Tree",
             "Logout"
         )
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, navItems)
@@ -59,17 +59,12 @@ open class BaseActivity : AppCompatActivity() {
                 4 -> startActivity(Intent(this, BudgetGoalsActivity::class.java))
                 5 -> startActivity(Intent(this, SearchCategoryActivity::class.java))
                 6 -> startActivity(Intent(this, SearchExpensesActivity::class.java))
-                7 -> startActivity(Intent(this, MyTreeActivity::class.java))
-                8 -> startActivity(Intent(this, AnalyticsActivity::class.java))
-                9 -> startActivity(Intent(this, ProgressDashboard::class.java))
-
-                // POE Part 3 features (Coming Soon)
-//                7 -> Toast.makeText(this, "My Tree (Coming Soon).", Toast.LENGTH_SHORT).show()
-//                8 -> Toast.makeText(this, "Analytics (Coming Soon).", Toast.LENGTH_SHORT).show()
-//                9 -> Toast.makeText(this, "Progress Dashboard (Coming Soon).", Toast.LENGTH_SHORT).show()
+                7 -> startActivity(Intent(this, AnalyticsActivity::class.java))
+                8 -> startActivity(Intent(this, ProgressDashboard::class.java))
+                // 9 -> startActivity(Intent(this, MyTreeActivity::class.java))
 
                 // Done and Implemented Logout feature
-                10 -> logoutUser()
+                9 -> logoutUser()
             }
             drawerLayout.closeDrawers()
         }

@@ -43,6 +43,7 @@ open class BaseActivity : AppCompatActivity() {
             "Search Expenses",
             "Analytics",
             "Progress Dashboard",
+            "Emergency Fund",
             // "My Tree",
             "Logout"
         )
@@ -61,10 +62,11 @@ open class BaseActivity : AppCompatActivity() {
                 6 -> startActivity(Intent(this, SearchExpensesActivity::class.java))
                 7 -> startActivity(Intent(this, AnalyticsActivity::class.java))
                 8 -> startActivity(Intent(this, ProgressDashboard::class.java))
+                9 -> startActivity(Intent(this, EmergencyFundHistoryActivity::class.java))
                 // 9 -> startActivity(Intent(this, MyTreeActivity::class.java))
 
                 // Done and Implemented Logout feature
-                9 -> logoutUser()
+                10 -> logoutUser()
             }
             drawerLayout.closeDrawers()
         }

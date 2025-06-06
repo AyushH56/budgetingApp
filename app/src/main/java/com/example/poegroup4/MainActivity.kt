@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         HomeCard("Search Expenses", R.drawable.ic_expenses),
         HomeCard("Analytics", R.drawable.ic_analytics),
         HomeCard("Progress Dashboard", R.drawable.ic_dashboard),
+        HomeCard("Emergency Fund", R.drawable.ic_emergency_fund),
         // HomeCard("My Tree", R.drawable.ic_tree),
         HomeCard("Logout", R.drawable.ic_logout),
     )
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity() {
                 "Search Expenses" -> startActivity(Intent(this, SearchExpensesActivity::class.java))
                 "Analytics" -> startActivity(Intent(this, AnalyticsActivity::class.java))
                 "Progress Dashboard" -> startActivity(Intent(this, ProgressDashboard::class.java))
+                "Emergency Fund" -> startActivity(Intent(this, EmergencyFundHistoryActivity::class.java))
                 // "My Tree" -> startActivity(Intent(this, MyTreeActivity::class.java))
 
                 // If user selects "Logout", call logoutUser() method

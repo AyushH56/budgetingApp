@@ -59,6 +59,8 @@
         <activity android:name=".MyTreeActivity" />
         <activity android:name=".AnalyticsActivity" />
         <activity android:name=".ProgressDashboard" />
+        <activity android:name=".EmergencyFundHistoryActivity" />
+
 
         <provider
             android:name="androidx.core.content.FileProvider"

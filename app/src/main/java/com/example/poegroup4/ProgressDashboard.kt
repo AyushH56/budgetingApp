@@ -32,6 +32,8 @@ class ProgressDashboard : BaseActivity() {
             findViewById(R.id.content_frame)
         )
 
+        supportActionBar?.title = "Progress Dashboard"
+
         pieChart = findViewById(R.id.pieChart)
         container = findViewById(R.id.progressContainer)
 

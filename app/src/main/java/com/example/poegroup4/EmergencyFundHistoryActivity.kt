@@ -13,6 +13,7 @@ import java.util.*
 
 class EmergencyFundHistoryActivity : BaseActivity() {
 
+    private lateinit var tvCurrentEmergencyFundTotal: TextView
     private lateinit var tvEmergencyFundTotal: TextView
     private lateinit var periodGroup: RadioGroup
     private lateinit var recyclerView: RecyclerView
@@ -25,8 +26,10 @@ class EmergencyFundHistoryActivity : BaseActivity() {
         // Inflate into BaseActivity’s content_frame
         layoutInflater.inflate(R.layout.activity_emergency_fund_history, findViewById(R.id.content_frame))
 
-        supportActionBar?.title = "Emergency Fund History"
+        supportActionBar?.title = "Emergency Fund"
 
+        // UI references
+        tvCurrentEmergencyFundTotal = findViewById(R.id.tvCurrentEmergencyFundTotal)
         tvEmergencyFundTotal = findViewById(R.id.tvEmergencyFundTotal)
         periodGroup = findViewById(R.id.periodRadioGroup)
         recyclerView = findViewById(R.id.recyclerEmergencyFundHistory)
@@ -36,7 +39,7 @@ class EmergencyFundHistoryActivity : BaseActivity() {
         recyclerView.adapter = adapter
 
         setupRadioGroup()
-        fetchDataAndLoadGraphs("Last Week")
+        fetchDataAndLoadGraphs("Last Week")  // Default period
     }
 
     private fun setupRadioGroup() {
@@ -59,9 +62,7 @@ class EmergencyFundHistoryActivity : BaseActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 emergencyFundList.clear()
 
-                val now = Calendar.getInstance()
                 val startCalendar = Calendar.getInstance()
-
                 when (period) {
                     "Last Week" -> startCalendar.add(Calendar.DAY_OF_YEAR, -7)
                     "Last Month" -> startCalendar.add(Calendar.MONTH, -1)
@@ -69,7 +70,9 @@ class EmergencyFundHistoryActivity : BaseActivity() {
                 }
 
                 val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                var totalEmergencyFund = 0.0
+
+                var currentTotalEmergencyFund = 0.0
+                var periodTotalEmergencyFund = 0.0
 
                 for (transSnap in snapshot.children) {
                     val emergencyFund = transSnap.child("emergencyFund").getValue(Double::class.java) ?: 0.0
@@ -83,22 +86,26 @@ class EmergencyFundHistoryActivity : BaseActivity() {
                         null
                     } ?: continue
 
-                    if (dateObj.before(startCalendar.time)) continue
-
                     if (emergencyFund > 0) {
-                        emergencyFundList.add(
-                            Transaction(
-                                amount = amount,
-                                emergencyFund = emergencyFund,
-                                date = dateStr,
-                                description = description
+                        currentTotalEmergencyFund += emergencyFund
+
+                        if (!dateObj.before(startCalendar.time)) {
+                            emergencyFundList.add(
+                                Transaction(
+                                    amount = amount,
+                                    emergencyFund = emergencyFund,
+                                    date = dateStr,
+                                    description = description
+                                )
                             )
-                        )
-                        totalEmergencyFund += emergencyFund
+                            periodTotalEmergencyFund += emergencyFund
+                        }
                     }
                 }
 
-                tvEmergencyFundTotal.text = "Emergency Fund Total: R${"%.2f".format(totalEmergencyFund)}"
+                tvCurrentEmergencyFundTotal.text = "Current Emergency Fund: R${"%.2f".format(currentTotalEmergencyFund)}"
+                tvEmergencyFundTotal.text = "Total in Period: R${"%.2f".format(periodTotalEmergencyFund)}"
+
                 adapter.notifyDataSetChanged()
             }
 

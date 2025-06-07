@@ -96,7 +96,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/categoryBreakdownRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="205dp"
+            android:layout_height="397dp"
             android:clipToPadding="false"
             android:overScrollMode="ifContentScrolls"
             android:paddingBottom="16dp"

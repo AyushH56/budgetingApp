@@ -19,14 +19,14 @@
 
         <TextView
             android:id="@+id/homeTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="LeafSaver Home"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
+            android:layout_width="310dp"
+            android:layout_height="58dp"
             android:gravity="start|center_vertical"
-            android:paddingEnd="100dp" />
+            android:paddingEnd="100dp"
+            android:text="LeafSaver Home"
+            android:textColor="#000000"
+            android:textSize="26sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/treeIcon"
@@ -53,136 +53,3 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-    <!-- Old activity_main.xml-->
-<!--
-    <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/main"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@drawable/ic_gradient_background"
-android:fillViewport="true">
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="32dp"
-    android:gravity="center_horizontal">
-
-    &lt;!&ndash; Header Section &ndash;&gt;
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="24dp"
-        android:gravity="center"
-        android:text="Welcome to LeafSaver!"
-        android:textColor="#000000"
-        android:textSize="28sp"
-        android:textStyle="bold|italic" />
-
-    <ImageView
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="24dp"
-        android:contentDescription="Tree Icon"
-        android:src="@drawable/tree_icon" />
-
-    &lt;!&ndash; DatePicker Section &ndash;&gt;
-    <TextView
-        android:id="@+id/tvSelectMonth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:gravity="center"
-        android:text="Select a Month"
-        android:textColor="#555555"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/btnOpenDatePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#228B22"
-        android:padding="12dp"
-        android:text="Choose Month"
-        android:textColor="#FFFFFF" />
-
-    <TextView
-        android:id="@+id/tvSelectedMonth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:gravity="center"
-        android:text="March, 2025"
-        android:textColor="#000000"
-        android:textSize="16sp" />
-
-    &lt;!&ndash; Budget Goal and Emergency Fund Inputs &ndash;&gt;
-    <EditText
-        android:id="@+id/etBudgetGoal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:hint="Enter Budget Goal"
-        android:inputType="numberDecimal"
-        android:padding="12dp"
-        android:background="@drawable/edittext_background" />
-
-    <EditText
-        android:id="@+id/etEmergencyFund"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:hint="Enter Emergency Fund"
-        android:inputType="numberDecimal"
-        android:padding="12dp"
-        android:background="@drawable/edittext_background" />
-
-    &lt;!&ndash; Save Budget Button &ndash;&gt;
-    <Button
-        android:id="@+id/btnSaveBudget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="#228B22"
-        android:padding="12dp"
-        android:text="Save Budget"
-        android:textColor="#FFFFFF" />
-
-    &lt;!&ndash; Budget Overview &ndash;&gt;
-    <TextView
-        android:id="@+id/tvBudgetTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:gravity="center"
-        android:text="Your Budget Overview"
-        android:textColor="#000000"
-        android:textSize="18sp" />
-
-    &lt;!&ndash; RecyclerView &ndash;&gt;
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewBudget"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:clipToPadding="false"
-        android:padding="8dp"
-        android:scrollbars="vertical" />
-
-    &lt;!&ndash; Spacer under RecyclerView &ndash;&gt;
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@android:color/transparent" />
-</LinearLayout>
-</ScrollView>-->

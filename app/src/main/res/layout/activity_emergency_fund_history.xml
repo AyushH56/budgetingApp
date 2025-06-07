@@ -18,7 +18,7 @@
 
             <TextView
                 android:id="@+id/headerTitle"
-                android:layout_width="match_parent"
+                android:layout_width="273dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Emergency Fund"
@@ -38,27 +38,27 @@
 
         <TextView
             android:id="@+id/tvCurrentEmergencyFundTotal"
-            android:layout_width="match_parent"
+            android:layout_width="339dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
             android:text="Current Emergency Fund: R0.00"
             android:textColor="#000000"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvEmergencyFundTotal"
-            android:layout_width="match_parent"
+            android:layout_width="339dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
             android:text="Total in Period: R0.00"
             android:textColor="#008000"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp" />
+            android:textStyle="bold" />
 
         <RadioGroup
             android:id="@+id/periodRadioGroup"
@@ -72,19 +72,22 @@
                 android:id="@+id/radioLastWeek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last Week" />
+                android:text="Last Week"
+                android:textSize="13sp" />
 
             <RadioButton
                 android:id="@+id/radioLastMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last Month" />
+                android:text="Last Month"
+                android:textSize="13sp" />
 
             <RadioButton
                 android:id="@+id/radioLastQuarter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last Quarter" />
+                android:text="Last Quarter"
+                android:textSize="13sp" />
         </RadioGroup>
 
         <androidx.recyclerview.widget.RecyclerView

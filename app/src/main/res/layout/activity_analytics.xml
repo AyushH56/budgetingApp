@@ -18,13 +18,13 @@
 
             <TextView
                 android:id="@+id/headerTitle"
-                android:layout_width="match_parent"
+                android:layout_width="276dp"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Analytics"
-                android:textSize="24sp"
-                android:textStyle="bold"
                 android:textColor="#000000"
-                android:gravity="center" />
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/treeIcon"
@@ -57,19 +57,22 @@
                 android:id="@+id/radioLastWeek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last Week" />
+                android:text="Last Week"
+                android:textSize="13sp" />
 
             <RadioButton
                 android:id="@+id/radioLastMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last Month" />
+                android:text="Last Month"
+                android:textSize="13sp" />
 
             <RadioButton
                 android:id="@+id/radioLastQuarter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last Quarter" />
+                android:text="Last Quarter"
+                android:textSize="13sp" />
         </RadioGroup>
 
         <TextView

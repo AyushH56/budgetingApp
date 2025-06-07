@@ -60,6 +60,7 @@
         <activity android:name=".AnalyticsActivity" />
         <activity android:name=".ProgressDashboard" />
         <activity android:name=".EmergencyFundHistoryActivity" />
+        <activity android:name=".ChatBotActivity" />
 
 
         <provider

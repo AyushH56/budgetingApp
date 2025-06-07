@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_gradient_background"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Header -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/headerTitle"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Customer Service Bot"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/treeIcon"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="end|center_vertical"
+            android:src="@drawable/tree_icon"
+            android:contentDescription="Tree Icon"
+            android:background="@android:color/transparent" />
+    </FrameLayout>
+
+    <!-- RecyclerView for messages -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerChat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
+        android:overScrollMode="never" />
+
+    <!-- Message input area -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_message_input"
+            android:elevation="2dp"
+            android:hint="Type a message"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#4CAF50" />
+    </LinearLayout>
+
+</LinearLayout>
